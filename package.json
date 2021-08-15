@@ -1,0 +1,17 @@
+{
+  "name": "manga-puppet",
+  "version": "1.0.0",
+  "description": "Manga downloader for manga4life.com",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Andrew Li",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "jsdom": "^17.0.0",
+    "jszip": "^3.7.1",
+    "puppeteer": "^10.2.0"
+  }
+}
