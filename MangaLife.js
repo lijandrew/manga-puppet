@@ -12,7 +12,28 @@ class MangaLife extends Source {
     super("MangaLife");
   }
 
-  static async getMangas() {}
+  static async getMangas() {
+    const browser = await puppeteer.launch();
+    const [page] = await browser.pages();
+    await page.goto("https://manga4life.com/directory", {
+      waitUntil: "networkidle0",
+    });
+    await page.waitForSelector("div[ng-repeat]");
+    let titleAndUrl = await page.evaluate(() => {
+      return [...document.querySelectorAll("div[ng-repeat] a")].map((elem) => [
+        elem.textContent,
+        elem.href,
+      ]);
+    });
+    await browser.close();
+    let mangas = titleAndUrl.map((entry) => {
+      let title = entry[0];
+      let url = entry[1];
+      let id = url.split("/").pop();
+      return new Manga(id, url, title);
+    });
+    return mangas;
+  }
 
   static async getMangaById(id) {
     let response = await axios.get(`https://manga4life.com/rss/${id}.xml`);
@@ -21,7 +42,8 @@ class MangaLife extends Source {
     const parser = new DOMParser();
     const document = parser.parseFromString(response.data, "text/xml");
     let title = document.querySelector("channel > title").textContent;
-    return new Manga(id, title);
+    let url = "https://manga4life.com/manga/" + id;
+    return new Manga(id, url, title);
   }
 
   static async getChapters(manga) {

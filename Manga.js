@@ -6,8 +6,9 @@
  * the actual formal title.
  */
 class Manga {
-  constructor(id, title) {
+  constructor(id, url, title) {
     this.id = id;
+    this.url = url;
     this.title = title;
   }
 }
