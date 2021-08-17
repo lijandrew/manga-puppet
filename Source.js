@@ -1,31 +1,22 @@
+const fs = require("fs");
+const path = require("path");
+
 /**
  * Source superclass. Represents manga sites that can be downloaded from.
  */
 class Source {
-  constructor(sourceName) {
-    this.downloadBaseDir = "downloads";
-    this.sourceName = sourceName;
+  constructor(name) {
+    this.name = name;
   }
 
-  async getTitle(id) {}
+  static async getMangas() {}
+  static async getMangaById(id) {}
+  static async getChapters(manga) {}
+  static async getPages(chapter) {}
 
-  /*
-  chapter = {
-    url: "...",
-    title: "...",
-  };
-  */
-  async getChapters(id) {}
+  // Prospective methods
+  async searchByTitle(title) {}
 
-  async downloadChapter(id, chapter) {}
-
-  async downloadAllChapters(id) {
-    let chapters = await this.getChapters(id);
-    let chapterPromises = chapters.map((chapter) =>
-      this.downloadChapter(id, chapter)
-    );
-    await Promise.all(chapterPromises);
-  }
 }
 
 module.exports = Source;

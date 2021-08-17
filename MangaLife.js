@@ -1,32 +1,37 @@
-const fs = require("fs");
-const path = require("path");
 const axios = require("axios");
 const { JSDOM } = require("jsdom");
 const puppeteer = require("puppeteer");
 
 const Source = require("./Source.js");
+const Manga = require("./Manga");
+const Chapter = require("./Chapter.js");
+const Page = require("./Page.js");
 
 class MangaLife extends Source {
   constructor() {
     super("MangaLife");
   }
 
-  async getTitle(id) {
+  static async getMangas() {}
+
+  static async getMangaById(id) {
     let response = await axios.get(`https://manga4life.com/rss/${id}.xml`);
     const dom = new JSDOM("");
     const DOMParser = dom.window.DOMParser;
     const parser = new DOMParser();
     const document = parser.parseFromString(response.data, "text/xml");
-    return document.querySelector("channel > title").textContent;
+    let title = document.querySelector("channel > title").textContent;
+    return new Manga(id, title);
   }
 
-  async getChapters(id) {
-    let response = await axios.get(`https://manga4life.com/rss/${id}.xml`);
+  static async getChapters(manga) {
+    let response = await axios.get(
+      `https://manga4life.com/rss/${manga.id}.xml`
+    );
     const dom = new JSDOM("");
     const DOMParser = dom.window.DOMParser;
     const parser = new DOMParser();
     const document = parser.parseFromString(response.data, "text/xml");
-    let mangaTitle = await this.getTitle(id);
     let chapters = [...document.querySelectorAll("item")]
       .map((elem) => {
         let url = elem
@@ -34,22 +39,15 @@ class MangaLife extends Source {
           .textContent.replace(/-page-\d+/, "");
         let title = elem
           .querySelector("title")
-          .textContent.replace(new RegExp(`\\ *${mangaTitle.trim()}\\ *`), "");
-        return {
-          url,
-          title,
-        };
+          .textContent.replace(new RegExp(`\\ *${manga.title}\\ *`), "");
+        return new Chapter(url, title, manga);
       })
       .reverse();
     return chapters;
   }
 
-  async downloadChapter(id, chapter) {
-    /*
-    Use puppeteer to get image urls.
-    puppeteer is needed because image urls are unpredictable,
-    as they can come from different sources (i.e. different scanlators)
-    */
+  static async getPages(chapter) {
+    // Get image urls using puppeteer
     const browser = await puppeteer.launch();
     const [page] = await browser.pages();
     await page.goto(chapter.url, { waitUntil: "networkidle0" });
@@ -59,39 +57,16 @@ class MangaLife extends Source {
       )
     );
     await browser.close();
-    console.log(imageUrls);
 
-    // Prepare download directory
-    const downloadPath = path.join(
-      __dirname,
-      this.downloadBaseDir,
-      this.sourceName,
-      await this.getTitle(id),
-      chapter.title
-    );
-    if (!fs.existsSync(downloadPath)) {
-      fs.mkdirSync(downloadPath, { recursive: true });
-    }
-
-    // Start all page image downloads
-    let downloadPromises = [];
-    for (let i = 1; i <= imageUrls.length; i++) {
-      let url = imageUrls[i - 1];
+    let pages = [];
+    for (let i = 0; i < imageUrls.length; i++) {
+      let url = imageUrls[i];
       let extension = url.split(/[#?]/)[0].split(".").pop().trim();
-      downloadPromises.push(
-        axios({
-          url: url,
-          responseType: "stream",
-        }).then((response) => {
-          response.data.pipe(
-            fs.createWriteStream(path.join(downloadPath, `${i}.${extension}`))
-          );
-        })
-      );
+      let filename = `${i + 1}.${extension}`;
+      pages.push(new Page(url, filename, chapter, chapter.manga));
     }
 
-    // Return single grouped Promise (purely for waiting purposes)
-    return Promise.all(downloadPromises);
+    return pages;
   }
 }
 
