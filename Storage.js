@@ -1,32 +1,36 @@
 const fs = require("fs");
 const fsPromises = fs.promises;
 const path = require("path");
+const JSZip = require("jszip");
 
+/**
+ * Path arguments should be as specific possible.
+ * Storage methods should do as little path-wrangling as possible.
+ */
 const Storage = {
-  async saveImagesToFolder(directory, images) {
+  async saveImagesToFolder(folderPath, images) {
     console.log("Storage: saveImagesToFolder");
-    if (!fs.existsSync(directory)) {
-      fs.mkdirSync(directory, { recursive: true });
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, { recursive: true });
     }
     let writePromises = Promise.all(
       images.map((image) =>
-        fsPromises.writeFile(path.join(directory, image.filename), image.data)
+        fsPromises.writeFile(path.join(folderPath, image.filename), image.data)
       )
     );
     await writePromises;
   },
 
-  async saveImagesToCbz(directory, images) {
-    /*
+  async saveImagesToCbz(zipPath, images) {
     let zip = new JSZip();
-    for (let image of images) {
-    }
+    images.forEach((image) => {
+      zip.file(image.filename, image.data);
+    });
     return zip
       .generateAsync({ compression: "STORE", type: "uint8array" })
-      .then((data) => {
-        return this._writeFile(path.join(directory), data);
+      .then((archive) => {
+        return fsPromises.writeFile(zipPath, archive);
       });
-      */
   },
 };
 

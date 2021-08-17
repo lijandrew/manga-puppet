@@ -24,10 +24,17 @@ class DownloadJob {
     let mangaTitle = this.pages[0].chapter.manga.title;
     let chapterTitle = this.pages[0].chapter.title;
 
+    await Storage.saveImagesToCbz(
+      path.join(__dirname, "downloads", mangaTitle, chapterTitle + ".cbz"),
+      images
+    );
+
+    /*
     await Storage.saveImagesToFolder(
       path.join(__dirname, "downloads", mangaTitle, chapterTitle),
       images
     );
+    */
   }
 }
 
