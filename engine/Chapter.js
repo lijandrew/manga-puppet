@@ -4,10 +4,10 @@
  * manga object it belongs to.
  */
 class Chapter {
-  constructor(url, title, manga) {
+  constructor(url, title) {
     this.url = url;
     this.title = title;
-    this.manga = manga;
+    this.pages = [];
   }
 }
 

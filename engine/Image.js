@@ -1,6 +1,5 @@
 /**
- * Stores Image information, namely the filename it is to be saved as,
- * and its binary data.
+ * Stores basic Image information: its filename and binary data.
  */
 class Image {
   constructor(filename, data) {
