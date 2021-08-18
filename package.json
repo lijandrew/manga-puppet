@@ -2,7 +2,7 @@
   "name": "manga-puppet",
   "version": "1.0.0",
   "description": "Manga downloader",
-  "main": "app/main.js",
+  "main": "app/electron.js",
   "scripts": {
     "electron": "electron .",
     "watch": "webpack serve",
@@ -27,7 +27,6 @@
     "css-loader": "^6.2.0",
     "electron": "^13.2.1",
     "electron-packager": "^15.3.0",
-    "electron-reloader": "^1.2.1",
     "html-webpack-plugin": "^5.3.2",
     "node-sass": "^6.0.1",
     "sass-loader": "^12.1.0",
