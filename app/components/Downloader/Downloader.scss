@@ -8,14 +8,14 @@
   padding: 30px 0;
 }
 
-.Downloader-manga-list,
-.Downloader-chapter-list {
+.Downloader-manga-list {
   overflow-y: auto;
 }
 
-.Downloader-manga-list-entry,
-.Downloader-chapter-list-entry {
+.Downloader-manga-list-entry {
   cursor: pointer;
+  padding: 10px;
+  border-bottom: 1px solid black;
   &:hover {
     background-color: gray;
   }

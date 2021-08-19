@@ -38,14 +38,13 @@ MangaLife.fetchChapters = async (manga) => {
   const DOMParser = dom.window.DOMParser;
   const parser = new DOMParser();
   const document = parser.parseFromString(response.data, "text/xml");
-  let chapters = [...document.querySelectorAll("item")]
-    .map((elem) => {
-      let url = elem.querySelector("link").textContent.replace(/-page-\d+/, "");
-      let title = elem
-        .querySelector("title")
-        .textContent.replace(new RegExp(`\\ *${manga.title}\\ *`), "");
-      return new Chapter(url, title);
-    })
+  let chapters = [...document.querySelectorAll("item")].map((elem) => {
+    let url = elem.querySelector("link").textContent.replace(/-page-\d+/, "");
+    let title = elem
+      .querySelector("title")
+      .textContent.replace(manga.title + " ", "");
+    return new Chapter(url, title);
+  });
   return chapters;
 };
 
