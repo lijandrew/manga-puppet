@@ -5,6 +5,7 @@ const DownloadManager = {
     console.log("DownloadManager: enqueueJob");
     this.queue.push(downloadJob);
     if (this.queue.length === 1) {
+      // Start if queue was previously empty
       this.download();
     }
   },
@@ -16,6 +17,7 @@ const DownloadManager = {
 
   async download() {
     while (this.queue.length > 0) {
+      // Automatically continue to next job in queue
       console.log("DownloadManager: download");
       await this.dequeueJob().start();
     }

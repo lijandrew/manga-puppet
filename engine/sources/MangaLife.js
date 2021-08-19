@@ -46,7 +46,6 @@ MangaLife.fetchChapters = async (manga) => {
         .textContent.replace(new RegExp(`\\ *${manga.title}\\ *`), "");
       return new Chapter(url, title);
     })
-    .reverse();
   return chapters;
 };
 

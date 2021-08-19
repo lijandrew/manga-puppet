@@ -34,8 +34,23 @@ ipcMain.on("getSourceNames", () => {
   mainWindow.webContents.send("Engine:getSourceNames", Engine.getSourceNames());
 });
 
-ipcMain.on("getMangasBySourceName", (event, sourceName) => {
-  Engine.getMangasBySourceName(sourceName).then((mangas) => {
-    mainWindow.webContents.send("Engine:getMangasBySourceName", mangas);
+ipcMain.on("getMangas", (event, sourceName) => {
+  Engine.getMangas(sourceName).then((mangas) => {
+    mainWindow.webContents.send("Engine:getMangas", mangas);
   });
+});
+
+ipcMain.on("getChapters", (event, sourceName, manga) => {
+  Engine.getChapters(sourceName, manga).then((chapters) => {
+    mainWindow.webContents.send("Engine:getChapters", chapters);
+  });
+});
+
+ipcMain.on("downloadChapter", (event, sourceName, manga, chapter) => {
+  Engine.downloadChapter(sourceName, manga, chapter);
+  /*
+  Engine.downloadChapter(source, manga, chapter).then(() => {
+    mainWindow.webContents.send("Engine:downloadChapter", "Done");
+  });
+  */
 });

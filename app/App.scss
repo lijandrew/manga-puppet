@@ -1,5 +1,8 @@
 @import "./variables.scss";
 
 .App {
-  background-color: $dark;
+  // background-color: $dark;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
 }
