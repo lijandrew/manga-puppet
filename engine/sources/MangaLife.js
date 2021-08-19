@@ -32,6 +32,16 @@ MangaLife.fetchMangas = async () => {
   return mangas;
 };
 
+MangaLife.fetchCoverImageUrl = async (manga) => {
+  let response = await axios.get(`https://manga4life.com/rss/${manga.id}.xml`);
+  const dom = new JSDOM("");
+  const DOMParser = dom.window.DOMParser;
+  const parser = new DOMParser();
+  const document = parser.parseFromString(response.data, "text/xml");
+  let url = document.querySelector("channel > img > url").textContent;
+  return url;
+};
+
 MangaLife.fetchChapters = async (manga) => {
   let response = await axios.get(`https://manga4life.com/rss/${manga.id}.xml`);
   const dom = new JSDOM("");

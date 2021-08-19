@@ -1,14 +1,21 @@
-.MangaView,
-.MangaView-list {
+@import "../../variables.scss";
+
+.ChapterView,
+.ChapterView-list {
   overflow-y: auto;
 }
 
-.MangaView {
+.ChapterView {
   margin: 30px;
   border: 2px solid black;
 }
 
-.MangaView-list-entry {
+.ChapterView-list {
+  min-height: 300px;
+  min-width: 300px;
+}
+
+.ChapterView-list-entry {
   user-select: none;
   cursor: pointer;
   padding: 5px;

@@ -9,9 +9,11 @@ const Engine = {
   getSources() {
     return [MangaLife];
   },
+
   getSourceNames() {
     return this.getSources().map((source) => source.name);
   },
+
   getSourceByName(sourceName) {
     let result = this.getSources().filter(
       (source) => source.name === sourceName
@@ -19,9 +21,7 @@ const Engine = {
     return result;
   },
 
-  /**
-   * @async
-   */
+  // Returns a Promise
   getMangas(sourceName) {
     if (sourceName === "") {
       return [];
@@ -30,9 +30,7 @@ const Engine = {
     return source.getMangas();
   },
 
-  /**
-   * @async
-   */
+  // Returns a Promise
   getChapters(sourceName, manga) {
     if (sourceName === "" || manga === null) {
       return [];
@@ -40,13 +38,18 @@ const Engine = {
     return this.getSourceByName(sourceName).getChapters(manga);
   },
 
-  downloadChapter(sourceName, manga, chapter) {
-    if (sourceName === "" || manga === null) {
+  // Returns nothing for now
+  downloadChapters(sourceName, manga, chapters) {
+    if (sourceName === "" || manga === null || chapters.length === 0) {
       return [];
     }
     const source = this.getSourceByName(sourceName);
-    const downloadJob = new DownloadJob(source, manga, chapter);
-    DownloadManager.enqueueJob(downloadJob);
+    chapters.forEach((chapter) => {
+      DownloadManager.enqueueJob(new DownloadJob(source, manga, chapter));
+    });
+
+    // Promise that resolves when DownloadManager finishes all in queue
+    return DownloadManager.start();
   },
 };
 

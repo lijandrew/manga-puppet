@@ -9,11 +9,21 @@ function Source(name) {
   this.fetchMangas = async () => {};
   this.fetchChapters = async () => {};
   this.fetchPages = async () => {};
+  this.fetchCoverImageUrl = async (manga) => {};
 
   this.clearCache = async () => {
     this.mangas = [];
   };
 
+  this.getCoverImageUrl = async (manga) => {
+    // Check for cache
+    if (manga.coverImageUrl !== "") {
+      return manga.coverImageUrl;
+    }
+    // Cache
+    manga.coverImageUrl = await this.fetchCoverImageUrl(manga);
+    return manga.coverImageUrl;
+  };
   this.getMangas = async () => {
     // Check for cache
     if (this.mangas.length > 0) {

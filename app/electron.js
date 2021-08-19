@@ -6,6 +6,8 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
+    width: 1200,
+    height: 800,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -30,27 +32,21 @@ app.on("window-all-closed", function () {
 
 //////////////
 
-ipcMain.on("getSourceNames", () => {
-  mainWindow.webContents.send("Engine:getSourceNames", Engine.getSourceNames());
+ipcMain.handle("getSourceNames", (event) => {
+  return Engine.getSourceNames();
 });
 
-ipcMain.on("getMangas", (event, sourceName) => {
-  Engine.getMangas(sourceName).then((mangas) => {
-    mainWindow.webContents.send("Engine:getMangas", mangas);
-  });
+ipcMain.handle("getMangas", async (event, sourceName) => {
+  return await Engine.getMangas(sourceName);
 });
 
-ipcMain.on("getChapters", (event, sourceName, manga) => {
-  Engine.getChapters(sourceName, manga).then((chapters) => {
-    mainWindow.webContents.send("Engine:getChapters", chapters);
-  });
+ipcMain.handle("getChapters", async (event, sourceName, manga) => {
+  return await Engine.getChapters(sourceName, manga);
 });
 
-ipcMain.on("downloadChapter", (event, sourceName, manga, chapter) => {
-  Engine.downloadChapter(sourceName, manga, chapter);
-  /*
-  Engine.downloadChapter(source, manga, chapter).then(() => {
-    mainWindow.webContents.send("Engine:downloadChapter", "Done");
-  });
-  */
-});
+ipcMain.handle(
+  "downloadChapters",
+  async (event, sourceName, manga, chapters) => {
+    await Engine.downloadChapters(sourceName, manga, chapters);
+  }
+);

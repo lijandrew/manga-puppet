@@ -30,12 +30,14 @@ function DownloadJob(source, manga, chapter) {
       this.chapter,
       images
     );
+    /*
     await Storage.saveImagesToFolder(
       this.source,
       this.manga,
       this.chapter,
       images
     );
+    */
   };
 }
 

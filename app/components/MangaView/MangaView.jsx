@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-const { ipcRenderer } = window.require("electron");
 
 import "./MangaView.scss";
 
@@ -7,87 +6,40 @@ class MangaView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chapters: [],
+      query: "",
     };
-    this.getChapters = this.getChapters.bind(this);
-    this.getChapterDivs = this.getChapterDivs.bind(this);
+    this.getMangaDivs = this.getMangaDivs.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  getChapters() {
-    ipcRenderer.send("getChapters", this.props.sourceName, this.props.manga);
-    ipcRenderer.on("Engine:getChapters", (event, chapters) => {
-      this.setState({ chapters: [...chapters] });
-    });
+  handleClick(manga) {
+    this.props.selectManga(manga);
   }
 
-  getChapterDivs() {
+  getMangaDivs() {
     let i = 1;
-    let chapterDivs = this.state.chapters.map((chapter) => {
+    let mangaDivs = this.props.mangas.map((manga) => {
       return (
         <div
-          key={`chapter-${i++}`}
-          onClick={() => this.handleChapterClick(chapter)}
-          className="MangaView-chapter-list-entry"
+          onClick={() => {
+            this.handleClick(manga);
+          }}
+          className={`MangaView-list-entry${
+            this.props.selectedManga === manga ? " selected" : ""
+          }`}
+          key={`manga-${i++}`}
         >
-          <div className="MangaView-chapter-list-entry-title">
-            {chapter.title}
-          </div>
+          {manga.title}
         </div>
       );
     });
-    return chapterDivs;
-  }
-
-  handleChapterClick(chapter) {
-    ipcRenderer.send(
-      "downloadChapter",
-      this.props.sourceName,
-      this.props.manga,
-      chapter
-    );
-    ipcRenderer.on("Engine:downloadChapter", (event) => {
-      console.log("Downloaded");
-    });
-  }
-
-  componentDidMount() {
-    console.log("MangaView:mount");
-    this.getChapters();
+    return mangaDivs;
   }
 
   render() {
     return (
       <div className="MangaView">
-        <div className="MangaView-header">
-          <div className="MangaView-cover">
-            <img
-              src={require("../../assets/cover.jpg")}
-              alt="Cover image placeholder"
-            />
-          </div>
-          <div className="MangaView-details">
-            <div className="MangaView-details-title">
-              {this.props.manga.title}
-            </div>
-            <hr />
-            <div className="MangaView-details-author">
-              <span>Author(s): </span> Author
-            </div>
-            <div className="MangaView-details-genres">
-              <span>Genre(s): </span>
-              Action, Fantasy, Romance
-            </div>
-            <div className="MangaView-details-releasedate">
-              <span>Released: </span>
-              2021
-            </div>
-            <div className="MangaView-details-status">
-              <span>Status: </span>
-              Ongoing
-            </div>
-          </div>
-        </div>
-        <div className="MangaView-chapter-list">{this.getChapterDivs()}</div>
+        <div className="MangaView-list">{this.getMangaDivs()}</div>
       </div>
     );
   }

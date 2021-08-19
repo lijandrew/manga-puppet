@@ -1,9 +1,8 @@
-// TODO: try not copying arrays when setting state
-
 import React, { Component } from "react";
 const { ipcRenderer } = window.require("electron");
 
 import MangaView from "../MangaView/MangaView.jsx";
+import ChapterView from "../ChapterView/ChapterView.jsx";
 
 import "./Downloader.scss";
 
@@ -11,90 +10,141 @@ class Downloader extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      query: "",
       sourceNames: [],
-      activeSourceName: "",
       mangas: [],
-      activeManga: null,
+      chapters: [],
+      selectedSourceName: "",
+      selectedManga: null,
+      selectedChapters: [],
+      downloading: false,
     };
     this.getSourceNames = this.getSourceNames.bind(this);
     this.getMangas = this.getMangas.bind(this);
-    this.getMangaDivs = this.getMangaDivs.bind(this);
-    this.handleMangaClick = this.handleMangaClick.bind(this);
+    this.getChapters = this.getChapters.bind(this);
+    this.selectManga = this.selectManga.bind(this);
+    this.selectChapters = this.selectChapters.bind(this);
+    this.handleDownloadClick = this.handleDownloadClick.bind(this);
   }
 
+  // Remove Promise wrapper if you aren't going to use it
   getSourceNames() {
-    ipcRenderer.send("getSourceNames");
-    ipcRenderer.on("Engine:getSourceNames", (event, sourceNames) => {
-      this.setState({
-        sourceNames: [...sourceNames],
-        activeSourceName: [...sourceNames][0],
+    return new Promise((resolve) => {
+      ipcRenderer.invoke("getSourceNames").then((sourceNames) => {
+        this.setState({ sourceNames: [...sourceNames] }, () => {
+          resolve();
+        });
       });
     });
   }
 
+  // Remove Promise wrapper if you aren't going to use it
   getMangas() {
-    if (this.state.activeSourceName === "") {
-      return [];
-    }
-    ipcRenderer.send("getMangas", this.state.activeSourceName);
-    ipcRenderer.on("Engine:getMangas", (event, mangas) => {
-      this.setState({ mangas: [...mangas] });
+    return new Promise((resolve) => {
+      ipcRenderer
+        .invoke("getMangas", this.state.selectedSourceName)
+        .then((mangas) => {
+          this.setState({ mangas: [...mangas] }, () => {
+            resolve();
+          });
+        });
     });
   }
 
-  handleMangaClick(manga) {
-    this.setState({ activeManga: manga });
+  // Remove Promise wrapper if you aren't going to use it
+  getChapters() {
+    return new Promise((resolve) => {
+      ipcRenderer
+        .invoke(
+          "getChapters",
+          this.state.selectedSourceName,
+          this.state.selectedManga
+        )
+        .then((chapters) => {
+          this.setState({ chapters: [...chapters] }, () => {
+            resolve();
+          });
+        });
+    });
   }
 
-  getMangaDivs() {
-    let i = 1;
-    let mangaDivs = this.state.mangas.map((manga) => {
-      return (
-        <div
-          onClick={() => {
-            this.handleMangaClick(manga);
-          }}
-          key={`manga-${i++}`}
-          className="Downloader-manga-list-entry"
-        >
-          <div className="Downloader-manga-list-entry-title">{manga.title}</div>
-        </div>
-      );
+  selectManga(manga) {
+    // Change selectedManga, clear selectedChapters, get new chapters
+    this.setState({ selectedManga: manga, selectedChapters: [] }, () => {
+      this.getChapters();
     });
-    return mangaDivs;
+  }
+
+  selectChapters(chapters) {
+    this.setState({ selectedChapters: [...chapters] });
+  }
+
+  handleDownloadClick() {
+    if (this.state.selectedSourceName === "") return;
+    if (this.state.selectManga === null) return;
+    if (this.state.selectedChapters.length === 0) return;
+    this.setState(
+      {
+        downloading: true,
+      },
+      () => {
+        ipcRenderer
+          .invoke(
+            "downloadChapters",
+            this.state.selectedSourceName,
+            this.state.selectedManga,
+            this.state.selectedChapters
+          )
+          .then(() => {
+            alert("Download complete.");
+            this.setState({
+              downloading: false,
+            });
+          });
+      }
+    );
   }
 
   componentDidMount() {
-    this.getSourceNames();
+    // Get source names and select the first one.
+    this.getSourceNames().then(() => {
+      this.setState((state) => ({
+        selectedSourceName: state.sourceNames[0],
+      }));
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.activeSourceName !== prevState.activeSourceName) {
-      // Update manga if source name changed
+    if (this.state.selectedSourceName !== prevState.selectedSourceName) {
+      // Detect source name change and update manga.
       this.getMangas();
     }
   }
 
   render() {
-    if (!this.props.active) {
-      return "";
-    }
     return (
       <div className="Downloader">
-        <div className="Downloader-bar">
-          Source: {this.state.activeSourceName}
-        </div>
-        <div className="Downloader-manga-list">{this.getMangaDivs()}</div>
-
-        {this.state.activeManga ? (
+        <div className="Downloader-views">
           <MangaView
-            sourceName={this.state.activeSourceName}
-            manga={this.state.activeManga}
+            mangas={this.state.mangas}
+            selectManga={this.selectManga}
+            selectedManga={this.state.selectedManga}
           />
-        ) : (
-          ""
-        )}
+          <ChapterView
+            chapters={this.state.chapters}
+            selectChapters={this.selectChapters}
+            selectedChapters={this.state.selectedChapters}
+          />
+        </div>
+        <div className="Downloader-download">
+          <button
+            disabled={
+              this.state.selectedChapters.length === 0 || this.state.downloading
+            }
+            onClick={this.handleDownloadClick}
+          >
+            Download
+          </button>
+        </div>
       </div>
     );
   }
