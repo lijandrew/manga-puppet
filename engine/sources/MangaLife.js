@@ -38,8 +38,19 @@ MangaLife.fetchCoverImageUrl = async (manga) => {
   const DOMParser = dom.window.DOMParser;
   const parser = new DOMParser();
   const document = parser.parseFromString(response.data, "text/xml");
-  let url = document.querySelector("channel > img > url").textContent;
-  return url;
+  let coverImageUrl = document.querySelector("channel > image > url").textContent;
+  return coverImageUrl;
+};
+
+MangaLife.fetchDetails = async (manga) => {
+  // TODO: actually fetch details
+  return {
+    authors: "",
+    genres: "",
+    releasedate: "",
+    status: "",
+    description: "",
+  };
 };
 
 MangaLife.fetchChapters = async (manga) => {

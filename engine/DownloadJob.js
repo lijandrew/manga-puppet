@@ -3,10 +3,13 @@ const axios = require("axios");
 const Storage = require("./Storage.js");
 const Image = require("./Image.js");
 
-function DownloadJob(source, manga, chapter) {
+function DownloadJob(source, manga, chapter, callback) {
   this.source = source;
   this.manga = manga;
   this.chapter = chapter;
+
+  // I'm usin this to resolve a Promise to signal that download finished
+  this.callback = callback;
 
   this.start = async () => {
     console.log("DownloadJob: start");
@@ -30,6 +33,7 @@ function DownloadJob(source, manga, chapter) {
       this.chapter,
       images
     );
+
     /*
     await Storage.saveImagesToFolder(
       this.source,
@@ -38,6 +42,8 @@ function DownloadJob(source, manga, chapter) {
       images
     );
     */
+
+    this.callback();
   };
 }
 

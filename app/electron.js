@@ -30,23 +30,32 @@ app.on("window-all-closed", function () {
   if (process.platform !== "darwin") app.quit();
 });
 
-//////////////
+//////// ipcMain handlers ////////
 
 ipcMain.handle("getSourceNames", (event) => {
   return Engine.getSourceNames();
 });
 
-ipcMain.handle("getMangas", async (event, sourceName) => {
-  return await Engine.getMangas(sourceName);
+ipcMain.handle("getMangas", (event, sourceName) => {
+  return Engine.getMangas(sourceName);
 });
 
-ipcMain.handle("getChapters", async (event, sourceName, manga) => {
-  return await Engine.getChapters(sourceName, manga);
+ipcMain.handle("getChapters", (event, sourceName, manga) => {
+  return Engine.getChapters(sourceName, manga);
 });
 
-ipcMain.handle(
-  "downloadChapters",
-  async (event, sourceName, manga, chapters) => {
-    await Engine.downloadChapters(sourceName, manga, chapters);
-  }
-);
+ipcMain.handle("getCoverImageUrl", (event, sourceName, manga) => {
+  return Engine.getCoverImageUrl(sourceName, manga);
+});
+
+ipcMain.handle("getDetails", (event, sourceName, manga) => {
+  return Engine.getDetails(sourceName, manga);
+});
+
+ipcMain.handle("downloadChapter", (event, sourceName, manga, chapter) => {
+  return Engine.downloadChapter(sourceName, manga, chapter);
+});
+
+ipcMain.handle("getLocalChapterTitles", (event, sourceName, manga) => {
+  return Engine.getLocalChapterTitles(sourceName, manga);
+});

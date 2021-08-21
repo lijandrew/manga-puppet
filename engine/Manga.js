@@ -1,16 +1,15 @@
 /**
  * Manga information.
  */
-function Manga(id, url, title, coverImageUrl = "") {
+function Manga(id, url, title) {
   // Essential information
   this.id = id;
   this.url = url;
   this.title = title;
-  this.coverImageUrl = coverImageUrl;
+  this.coverImageUrl = "";
   this.chapters = [];
 
-  // Extra details (i.e. author, genre, status, and anything
-  // that is visible in MangaView but not Downloader)
+  // Anything not absolutely needed for download functionality
   this.details = {
     authors: "",
     genres: "",

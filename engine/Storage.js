@@ -16,6 +16,28 @@ const Storage = {
     }
   },
 
+  getLocalChapterTitles(source, manga) {
+    console.log("Storage:getLocalChapters");
+    const mangaPath = path.join(
+      Settings.downloadPath,
+      source.name,
+      manga.title
+    );
+    if (!fs.existsSync(mangaPath)) {
+      // If manga path doesn't exist, there must not be chapters
+      return [];
+    }
+    // Unique filenames after removing .cbz extension
+    const localChapterTitles = [
+      ...new Set(
+        fs
+          .readdirSync(mangaPath)
+          .map((filename) => filename.replace(/\.cbz$/i, ""))
+      ),
+    ];
+    return localChapterTitles;
+  },
+
   async saveImagesToFolder(source, manga, chapter, images) {
     console.log("Storage: saveImagesToFolder");
     const folderPath = path.join(

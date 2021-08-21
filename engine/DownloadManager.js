@@ -4,6 +4,10 @@ const DownloadManager = {
   enqueueJob(downloadJob) {
     console.log("DownloadManager: enqueueJob");
     this.queue.push(downloadJob);
+    // Kick off download if first
+    if (this.queue.length === 1) {
+      this.start();
+    }
   },
 
   dequeueJob() {
@@ -13,7 +17,7 @@ const DownloadManager = {
 
   async start() {
     while (this.queue.length > 0) {
-      // Automatically continue to next job in queue
+      // Automatically continue to next job
       console.log("DownloadManager: download");
       await this.dequeueJob().start();
     }

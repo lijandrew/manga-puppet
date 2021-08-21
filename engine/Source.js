@@ -7,9 +7,10 @@ function Source(name) {
 
   // To be implemented by child
   this.fetchMangas = async () => {};
-  this.fetchChapters = async () => {};
-  this.fetchPages = async () => {};
+  this.fetchChapters = async (manga) => {};
+  this.fetchPages = async (chapter) => {};
   this.fetchCoverImageUrl = async (manga) => {};
+  this.fetchDetails = async (manga) => {};
 
   this.clearCache = async () => {
     this.mangas = [];
@@ -24,6 +25,19 @@ function Source(name) {
     manga.coverImageUrl = await this.fetchCoverImageUrl(manga);
     return manga.coverImageUrl;
   };
+
+  this.getDetails = async (manga) => {
+    // Check for cache
+    for (let detail in manga.details) {
+      if (manga.details[detail] !== "") {
+        return manga.details;
+      }
+    }
+    // Cache
+    manga.details = await this.fetchDetails(manga);
+    return manga.details;
+  };
+
   this.getMangas = async () => {
     // Check for cache
     if (this.mangas.length > 0) {

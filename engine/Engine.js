@@ -3,6 +3,7 @@
 
 const MangaLife = require("./sources/MangaLife.js");
 const DownloadManager = require("./DownloadManager.js");
+const Storage = require("./Storage.js");
 const DownloadJob = require("./DownloadJob.js");
 
 const Engine = {
@@ -15,41 +16,70 @@ const Engine = {
   },
 
   getSourceByName(sourceName) {
-    let result = this.getSources().filter(
-      (source) => source.name === sourceName
-    )[0];
-    return result;
+    return this.getSources()[this.getSourceNames().indexOf(sourceName)];
   },
 
-  // Returns a Promise
+  // Returns Promise
   getMangas(sourceName) {
-    if (sourceName === "") {
-      return [];
-    }
     const source = this.getSourceByName(sourceName);
-    return source.getMangas();
+    return source ? source.getMangas() : Promise.resolve([]);
   },
 
-  // Returns a Promise
+  // Returns Promise
+  getCoverImageUrl(sourceName, manga) {
+    const source = this.getSourceByName(sourceName);
+    return source ? source.getCoverImageUrl(manga) : Promise.resolve("");
+  },
+
+  // Returns Promise
+  getDetails(sourceName, manga) {
+    const source = this.getSourceByName(sourceName);
+    return source
+      ? source.getDetails(manga)
+      : Promise.resolve({
+          authors: "",
+          genres: "",
+          releasedate: "",
+          status: "",
+          description: "",
+        });
+  },
+
+  // Returns Promise
   getChapters(sourceName, manga) {
-    if (sourceName === "" || manga === null) {
-      return [];
+    if (sourceName === "" || !manga) {
+      return Promise.resolve([]);
     }
     return this.getSourceByName(sourceName).getChapters(manga);
   },
 
-  // Returns nothing for now
-  downloadChapters(sourceName, manga, chapters) {
-    if (sourceName === "" || manga === null || chapters.length === 0) {
-      return [];
+  // Returns Promise that resolves when download finishes
+  downloadChapter(sourceName, manga, chapter) {
+    if (!manga || !chapter) {
+      return;
     }
     const source = this.getSourceByName(sourceName);
-    chapters.forEach((chapter) => {
-      DownloadManager.enqueueJob(new DownloadJob(source, manga, chapter));
+    if (!source) {
+      return;
+    }
+    return new Promise((resolve) => {
+      const downloadJob = new DownloadJob(source, manga, chapter, () => {
+        // Use callback to resolve when download finishes
+        resolve();
+      });
+      DownloadManager.enqueueJob(downloadJob);
     });
+  },
 
-    // Promise that resolves when DownloadManager finishes all in queue
-    return DownloadManager.start();
+  getLocalChapterTitles(sourceName, manga) {
+    if (!manga) {
+      return;
+    }
+    const source = this.getSourceByName(sourceName);
+    if (!source) {
+      return;
+    }
+    return Storage.getLocalChapterTitles(source, manga);
   },
 };
 

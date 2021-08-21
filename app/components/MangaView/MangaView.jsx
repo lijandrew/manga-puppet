@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+const { ipcRenderer } = window.require("electron");
 
 import "./MangaView.scss";
 
@@ -6,26 +7,46 @@ class MangaView extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      mangas: [],
       query: "",
     };
+    this.init = this.init.bind(this);
+    this.getMangasPromise = this.getMangasPromise.bind(this);
     this.getMangaDivs = this.getMangaDivs.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.handleMangaClick = this.handleMangaClick.bind(this);
   }
 
-  handleClick(manga) {
-    this.props.selectManga(manga);
+  componentDidMount() {
+    this.init();
+  }
+
+  componentDidUpdate(prevProps) {
+    // Necessary?
+    if (this.props.sourceName !== prevProps.sourceName) {
+      this.init();
+    }
+  }
+
+  init() {
+    this.getMangasPromise().then((mangas) => {
+      this.setState({ mangas: mangas });
+    });
+  }
+
+  getMangasPromise() {
+    return ipcRenderer.invoke("getMangas", this.props.sourceName);
   }
 
   getMangaDivs() {
     let i = 1;
-    let mangaDivs = this.props.mangas.map((manga) => {
+    let mangaDivs = this.state.mangas.map((manga) => {
       return (
         <div
           onClick={() => {
-            this.handleClick(manga);
+            this.handleMangaClick(manga);
           }}
           className={`MangaView-list-entry${
-            this.props.selectedManga === manga ? " selected" : ""
+            manga === this.props.manga ? " selected" : ""
           }`}
           key={`manga-${i++}`}
         >
@@ -36,10 +57,18 @@ class MangaView extends Component {
     return mangaDivs;
   }
 
+  handleMangaClick(manga) {
+    this.props.setManga(manga);
+  }
+
   render() {
     return (
       <div className="MangaView">
-        <div className="MangaView-list">{this.getMangaDivs()}</div>
+        {this.props.sourceName !== "" && this.state.mangas.length === 0 ? (
+          <div className="MangaView-loading">Loading...</div>
+        ) : (
+          <div className="MangaView-list">{this.getMangaDivs()}</div>
+        )}
       </div>
     );
   }

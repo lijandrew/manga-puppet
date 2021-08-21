@@ -5,7 +5,8 @@ const DownloadManager = require("./engine/DownloadManager.js");
 async function main() {
   let mangas = await MangaLife.getMangas();
   let manga = mangas[0];
-
+  
+  /*
   let chapters = await MangaLife.getChapters(manga);
   let chapter = chapters[0];
 
@@ -14,6 +15,7 @@ async function main() {
   jobs.forEach((downloadJob) => {
     DownloadManager.enqueueJob(downloadJob);
   });
+  */
 }
 
 main();
