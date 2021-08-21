@@ -8,7 +8,7 @@ class ChapterView extends Component {
     super(props);
     this.state = {
       chapters: [],
-      localChapterTitles: [],
+      localChapterFilenames: [],
       coverImageUrl: require("../../assets/placeholder.jpg"),
       details: {
         authors: "",
@@ -25,8 +25,8 @@ class ChapterView extends Component {
     this.getChapterDivs = this.getChapterDivs.bind(this);
     this.getDownloadPromise = this.getDownloadPromise.bind(this);
     this.handleDownloadClick = this.handleDownloadClick.bind(this);
-    this.getLocalChapterTitlesPromise =
-      this.getLocalChapterTitlesPromise.bind(this);
+    this.getLocalChapterFilenamesPromise =
+      this.getLocalChapterFilenamesPromise.bind(this);
   }
 
   componentDidMount() {
@@ -38,18 +38,18 @@ class ChapterView extends Component {
       this.getCoverImageUrlPromise(),
       this.getDetailsPromise(),
       this.getChaptersPromise(),
-      this.getLocalChapterTitlesPromise(),
+      this.getLocalChapterFilenamesPromise(),
     ]);
     promises.then((results) => {
       const coverImageUrl = results[0];
       const details = results[1];
       const chapters = results[2];
-      const localChapterTitles = results[3];
+      const localChapterFilenames = results[3];
       this.setState({
         coverImageUrl: coverImageUrl,
         details: details,
         chapters: chapters,
-        localChapterTitles: localChapterTitles,
+        localChapterFilenames: localChapterFilenames,
       });
     });
   }
@@ -78,9 +78,9 @@ class ChapterView extends Component {
     );
   }
 
-  getLocalChapterTitlesPromise() {
+  getLocalChapterFilenamesPromise() {
     return ipcRenderer.invoke(
-      "getLocalChapterTitles",
+      "getLocalChapterFilenames",
       this.props.sourceName,
       this.props.manga
     );
@@ -100,7 +100,7 @@ class ChapterView extends Component {
             onClick={() => {
               this.handleDownloadClick(chapter);
             }}
-            disabled={this.state.localChapterTitles.includes(chapter.title)}
+            disabled={this.state.localChapterFilenames.includes(chapter.filename)}
           >
             Download
           </button>
@@ -122,9 +122,9 @@ class ChapterView extends Component {
   handleDownloadClick(chapter) {
     this.getDownloadPromise(chapter).then(() => {
       // Runs after chapter download finishes
-      this.getLocalChapterTitlesPromise().then((localChapterTitles) => {
+      this.getLocalChapterFilenamesPromise().then((filenames) => {
         this.setState({
-          localChapterTitles: localChapterTitles,
+          localChapterFilenames: filenames,
         });
       });
     });

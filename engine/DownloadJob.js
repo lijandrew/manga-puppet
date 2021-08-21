@@ -12,7 +12,7 @@ function DownloadJob(source, manga, chapter, callback) {
   this.callback = callback;
 
   this.start = async () => {
-    console.log("DownloadJob: start");
+    console.log("DownloadJob:start");
     // Get chapter pages if necessary
     // (user may have clicked download without opening the chapter)
     let pages = await this.source.getPages(this.chapter);

@@ -1,3 +1,5 @@
+const sanitize = require("sanitize-filename");
+
 /**
  * Chapter information, including
  * its url, formal title, and the
@@ -6,6 +8,7 @@
 function Chapter(url, title) {
   this.url = url;
   this.title = title;
+  this.filename = sanitize(title);
   this.pages = [];
 }
 

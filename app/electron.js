@@ -56,6 +56,6 @@ ipcMain.handle("downloadChapter", (event, sourceName, manga, chapter) => {
   return Engine.downloadChapter(sourceName, manga, chapter);
 });
 
-ipcMain.handle("getLocalChapterTitles", (event, sourceName, manga) => {
-  return Engine.getLocalChapterTitles(sourceName, manga);
+ipcMain.handle("getLocalChapterFilenames", (event, sourceName, manga) => {
+  return Engine.getLocalChapterFilenames(sourceName, manga);
 });

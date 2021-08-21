@@ -16,35 +16,35 @@ const Storage = {
     }
   },
 
-  getLocalChapterTitles(source, manga) {
+  getLocalChapterFilenames(source, manga) {
     console.log("Storage:getLocalChapters");
     const mangaPath = path.join(
       Settings.downloadPath,
-      source.name,
-      manga.title
+      source.filename,
+      manga.filename
     );
     if (!fs.existsSync(mangaPath)) {
       // If manga path doesn't exist, there must not be chapters
       return [];
     }
     // Unique filenames after removing .cbz extension
-    const localChapterTitles = [
+    const filenames = [
       ...new Set(
         fs
           .readdirSync(mangaPath)
           .map((filename) => filename.replace(/\.cbz$/i, ""))
       ),
     ];
-    return localChapterTitles;
+    return filenames;
   },
 
-  async saveImagesToFolder(source, manga, chapter, images) {
-    console.log("Storage: saveImagesToFolder");
+  saveImagesToFolder(source, manga, chapter, images) {
+    console.log("Storage:saveImagesToFolder");
     const folderPath = path.join(
       Settings.downloadPath,
-      source.name,
-      manga.title,
-      chapter.title
+      source.filename,
+      manga.filename,
+      chapter.filename
     );
     this.verifyPath(folderPath);
 
@@ -54,17 +54,17 @@ const Storage = {
         fsPromises.writeFile(path.join(folderPath, image.filename), image.data)
       )
     );
-    await writeFilePromises;
+    return writeFilePromises;
   },
 
-  async saveImagesToCbz(source, manga, chapter, images) {
+  saveImagesToCbz(source, manga, chapter, images) {
     console.log("Storage: saveImagesToCbz");
     const zipParentPath = path.join(
       Settings.downloadPath,
-      source.name,
-      manga.title
+      source.filename,
+      manga.filename
     );
-    const zipPath = path.join(zipParentPath, chapter.title + ".cbz");
+    const zipPath = path.join(zipParentPath, chapter.filename + ".cbz");
     this.verifyPath(zipParentPath);
 
     // Zip images and save .cbz to path

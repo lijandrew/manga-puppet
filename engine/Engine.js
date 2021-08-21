@@ -71,7 +71,7 @@ const Engine = {
     });
   },
 
-  getLocalChapterTitles(sourceName, manga) {
+  getLocalChapterFilenames(sourceName, manga) {
     if (!manga) {
       return;
     }
@@ -79,7 +79,7 @@ const Engine = {
     if (!source) {
       return;
     }
-    return Storage.getLocalChapterTitles(source, manga);
+    return Storage.getLocalChapterFilenames(source, manga);
   },
 };
 

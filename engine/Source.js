@@ -1,8 +1,11 @@
+const sanitize = require("sanitize-filename");
+
 /**
  * Source superclass. Represents manga sites.
  */
 function Source(name) {
   this.name = name;
+  this.filename = sanitize(name);
   this.mangas = [];
 
   // To be implemented by child

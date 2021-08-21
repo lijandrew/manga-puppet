@@ -1,3 +1,5 @@
+const sanitize = require("sanitize-filename");
+
 /**
  * Manga information.
  */
@@ -6,6 +8,7 @@ function Manga(id, url, title) {
   this.id = id;
   this.url = url;
   this.title = title;
+  this.filename = sanitize(title);
   this.coverImageUrl = "";
   this.chapters = [];
 

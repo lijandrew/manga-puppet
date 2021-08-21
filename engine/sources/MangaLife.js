@@ -6,6 +6,7 @@ const Source = require("../Source.js");
 const Manga = require("../Manga.js");
 const Chapter = require("../Chapter.js");
 const Page = require("../Page.js");
+const sanitize = require("sanitize-filename");
 
 const MangaLife = new Source("MangaLife");
 
@@ -38,7 +39,9 @@ MangaLife.fetchCoverImageUrl = async (manga) => {
   const DOMParser = dom.window.DOMParser;
   const parser = new DOMParser();
   const document = parser.parseFromString(response.data, "text/xml");
-  let coverImageUrl = document.querySelector("channel > image > url").textContent;
+  let coverImageUrl = document.querySelector(
+    "channel > image > url"
+  ).textContent;
   return coverImageUrl;
 };
 
@@ -84,7 +87,7 @@ MangaLife.fetchPages = async (chapter) => {
   for (let i = 0; i < imageUrls.length; i++) {
     let url = imageUrls[i];
     let extension = url.split(/[#?]/)[0].split(".").pop().trim();
-    let filename = `${i + 1}.${extension}`;
+    let filename = sanitize(`${i + 1}.${extension}`);
     pages.push(new Page(url, filename));
   }
   return pages;
