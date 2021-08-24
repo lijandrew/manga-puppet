@@ -5,4 +5,17 @@
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  max-height: 100%;
+}
+
+.SourceView {
+  z-index: 1;
+}
+
+.MangaView {
+  z-index: 2;
+}
+
+.ChapterView {
+  z-index: 3;
 }

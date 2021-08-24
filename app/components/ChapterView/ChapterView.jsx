@@ -9,7 +9,7 @@ class ChapterView extends Component {
     this.state = {
       chapters: [],
       localChapterFilenames: [],
-      coverImageUrl: require("../../assets/placeholder.jpg"),
+      coverImageUrl: "",
       details: {
         authors: "",
         genres: "",
@@ -23,9 +23,9 @@ class ChapterView extends Component {
     this.getChaptersPromise = this.getChaptersPromise.bind(this);
     this.getChapterDivs = this.getChapterDivs.bind(this);
     this.getDownloadPromise = this.getDownloadPromise.bind(this);
-    this.handleClickDownload = this.handleClickDownload.bind(this);
     this.getLocalChapterFilenamesPromise =
       this.getLocalChapterFilenamesPromise.bind(this);
+    this.handleDownloadClick = this.handleDownloadClick.bind(this);
   }
 
   componentDidMount() {
@@ -82,7 +82,7 @@ class ChapterView extends Component {
           {chapter.title}
           <button
             onClick={() => {
-              this.handleClickDownload(chapter);
+              this.handleDownloadClick(chapter);
             }}
             disabled={this.state.localChapterFilenames.includes(
               chapter.filename
@@ -105,7 +105,7 @@ class ChapterView extends Component {
     );
   }
 
-  handleClickDownload(chapter) {
+  handleDownloadClick(chapter) {
     this.getDownloadPromise(chapter).then(() => {
       // Runs after chapter download finishes
       this.getLocalChapterFilenamesPromise().then((filenames) => {
@@ -121,7 +121,7 @@ class ChapterView extends Component {
       <div className="ChapterView">
         <button
           onClick={() => {
-            this.props.setManga();
+            this.props.setManga(null);
           }}
         >
           Back
@@ -148,8 +148,10 @@ class ChapterView extends Component {
           </div>
         </div>
 
-        {this.props.manga && this.state.chapters.length === 0 ? (
-          <div className="ChapterView-loading">Loading...</div>
+        {this.state.chapters.length === 0 ? (
+          <div className="ChapterView-loading">
+            <img src={require("../../assets/loading.gif")} />
+          </div>
         ) : (
           <div className="ChapterView-list">{this.getChapterDivs()}</div>
         )}
