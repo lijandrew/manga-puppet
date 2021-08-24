@@ -30,9 +30,13 @@ MangaLife.fetchMangas = async () => {
     let id = url.split("/").pop();
     return new Manga(id, url, title);
   });
+  for (let i = 0; i < mangas.length; i++) {
+    mangas[i].coverImageUrl = `https://cover.nep.li/cover/${mangas[i].id}.jpg`;
+  }
   return mangas;
 };
 
+/*
 MangaLife.fetchCoverImageUrl = async (manga) => {
   let response = await axios.get(`https://manga4life.com/rss/${manga.id}.xml`);
   const dom = new JSDOM("");
@@ -44,6 +48,7 @@ MangaLife.fetchCoverImageUrl = async (manga) => {
   ).textContent;
   return coverImageUrl;
 };
+*/
 
 MangaLife.fetchDetails = async (manga) => {
   // TODO: actually fetch details

@@ -44,9 +44,11 @@ ipcMain.handle("getChapters", (event, sourceName, manga) => {
   return Engine.getChapters(sourceName, manga);
 });
 
+/*
 ipcMain.handle("getCoverImageUrl", (event, sourceName, manga) => {
   return Engine.getCoverImageUrl(sourceName, manga);
 });
+*/
 
 ipcMain.handle("getDetails", (event, sourceName, manga) => {
   return Engine.getDetails(sourceName, manga);

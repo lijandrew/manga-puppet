@@ -25,11 +25,13 @@ const Engine = {
     return source ? source.getMangas() : Promise.resolve([]);
   },
 
+  /*
   // Returns Promise
   getCoverImageUrl(sourceName, manga) {
     const source = this.getSourceByName(sourceName);
     return source ? source.getCoverImageUrl(manga) : Promise.resolve("");
   },
+  */
 
   // Returns Promise
   getDetails(sourceName, manga) {

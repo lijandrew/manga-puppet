@@ -1,19 +1,32 @@
-.MangaView,
-.MangaView-list {
+.MangaView {
   overflow-y: auto;
 }
 
 .MangaView {
-  margin: 30px;
-  border: 2px solid black;
+  margin: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.MangaView-list-entry {
-  user-select: none;
-  cursor: pointer;
-  padding: 5px;
-  border-bottom: 1px solid black;
-  &:hover {
-    background-color: #b3b3b3;
+.MangaView-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, max-content));
+  gap: 30px;
+  width: 100%;
+  margin-top: 60px;
+  overflow-y: auto;
+}
+
+.MangaView-list-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.MangaView-list-item-cover {
+  margin-top: 10px;
+  .MangaView-list-item-cover-image {
+    max-width: 100%;
   }
 }

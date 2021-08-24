@@ -19,6 +19,10 @@ function Source(name) {
     this.mangas = [];
   };
 
+  // Maybe cover image urls are more predictable
+  // than I imagined. This operation is now performed
+  // by fetchMangas
+  /*
   this.getCoverImageUrl = async (manga) => {
     // Check for cache
     if (manga.coverImageUrl !== "") {
@@ -28,6 +32,7 @@ function Source(name) {
     manga.coverImageUrl = await this.fetchCoverImageUrl(manga);
     return manga.coverImageUrl;
   };
+  */
 
   this.getDetails = async (manga) => {
     // Check for cache

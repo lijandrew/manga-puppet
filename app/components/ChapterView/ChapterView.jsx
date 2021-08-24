@@ -19,12 +19,11 @@ class ChapterView extends Component {
       },
     };
     this.init = this.init.bind(this);
-    this.getCoverImageUrlPromise = this.getCoverImageUrlPromise.bind(this);
     this.getDetailsPromise = this.getDetailsPromise.bind(this);
     this.getChaptersPromise = this.getChaptersPromise.bind(this);
     this.getChapterDivs = this.getChapterDivs.bind(this);
     this.getDownloadPromise = this.getDownloadPromise.bind(this);
-    this.handleDownloadClick = this.handleDownloadClick.bind(this);
+    this.handleClickDownload = this.handleClickDownload.bind(this);
     this.getLocalChapterFilenamesPromise =
       this.getLocalChapterFilenamesPromise.bind(this);
   }
@@ -35,31 +34,20 @@ class ChapterView extends Component {
 
   init() {
     let promises = Promise.all([
-      this.getCoverImageUrlPromise(),
       this.getDetailsPromise(),
       this.getChaptersPromise(),
       this.getLocalChapterFilenamesPromise(),
     ]);
     promises.then((results) => {
-      const coverImageUrl = results[0];
-      const details = results[1];
-      const chapters = results[2];
-      const localChapterFilenames = results[3];
+      const details = results[0];
+      const chapters = results[1];
+      const localChapterFilenames = results[2];
       this.setState({
-        coverImageUrl: coverImageUrl,
         details: details,
         chapters: chapters,
         localChapterFilenames: localChapterFilenames,
       });
     });
-  }
-
-  getCoverImageUrlPromise() {
-    return ipcRenderer.invoke(
-      "getCoverImageUrl",
-      this.props.sourceName,
-      this.props.manga
-    );
   }
 
   getDetailsPromise() {
@@ -90,17 +78,15 @@ class ChapterView extends Component {
     let i = 1;
     let chapterDivs = this.state.chapters.map((chapter) => {
       return (
-        <div
-          // onClick={(event) => this.handleChapterClick(event, chapter)}
-          className="ChapterView-list-entry"
-          key={`chapter-${i++}`}
-        >
+        <div className="ChapterView-list-entry" key={`chapter-${i++}`}>
           {chapter.title}
           <button
             onClick={() => {
-              this.handleDownloadClick(chapter);
+              this.handleClickDownload(chapter);
             }}
-            disabled={this.state.localChapterFilenames.includes(chapter.filename)}
+            disabled={this.state.localChapterFilenames.includes(
+              chapter.filename
+            )}
           >
             Download
           </button>
@@ -119,7 +105,7 @@ class ChapterView extends Component {
     );
   }
 
-  handleDownloadClick(chapter) {
+  handleClickDownload(chapter) {
     this.getDownloadPromise(chapter).then(() => {
       // Runs after chapter download finishes
       this.getLocalChapterFilenamesPromise().then((filenames) => {
@@ -142,7 +128,7 @@ class ChapterView extends Component {
         </button>
         <div className="ChapterView-title">{this.props.manga.title}</div>
         <div className="ChapterView-cover">
-          <img src={this.state.coverImageUrl} alt="Cover image" />
+          <img src={this.props.manga.coverImageUrl} alt="Cover image" />
         </div>
         <div className="ChapterView-details">
           <div className="ChapterView-details-authors">

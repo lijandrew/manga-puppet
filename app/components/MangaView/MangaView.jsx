@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 const { ipcRenderer } = window.require("electron");
 
 import "./MangaView.scss";
@@ -7,13 +8,15 @@ class MangaView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mangas: [],
       query: "",
+      mangas: [],
+      queryMangas: [],
     };
     this.init = this.init.bind(this);
     this.getMangasPromise = this.getMangasPromise.bind(this);
+    this.handleChangeQuery = this.handleChangeQuery.bind(this);
     this.getMangaDivs = this.getMangaDivs.bind(this);
-    this.handleMangaClick = this.handleMangaClick.bind(this);
+    this.handleClickManga = this.handleClickManga.bind(this);
   }
 
   componentDidMount() {
@@ -21,15 +24,23 @@ class MangaView extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    // Necessary?
     if (this.props.sourceName !== prevProps.sourceName) {
       this.init();
     }
   }
 
   init() {
+    // Get manga list
     this.getMangasPromise().then((mangas) => {
-      this.setState({ mangas: mangas });
+      // Query results
+      let queryMangas = mangas.filter((manga) =>
+        manga.title.includes(this.state.query)
+      );
+
+      this.setState({
+        mangas: mangas,
+        queryMangas: queryMangas,
+      });
     });
   }
 
@@ -39,32 +50,43 @@ class MangaView extends Component {
 
   getMangaDivs() {
     let i = 1;
-    let mangaDivs = this.state.mangas.map((manga) => {
-      return (
-        <div
-          onClick={() => {
-            this.handleMangaClick(manga);
-          }}
-          className={`MangaView-list-entry${
-            manga === this.props.manga ? " selected" : ""
-          }`}
-          key={`manga-${i++}`}
-        >
-          {manga.title}
+    return this.state.queryMangas.map((manga) => (
+      <div
+        onClick={() => {
+          this.handleClickManga(manga);
+        }}
+        key={`manga-${i++}`}
+        className="MangaView-list-item"
+      >
+        <div className="MangaView-list-item-title">{manga.title}</div>
+        <div className="MangaView-list-item-cover">
+          <LazyLoadImage className="MangaView-list-item-cover-image" src={manga.coverImageUrl} />
+          {/* <img src={manga.coverImageUrl} /> */}
         </div>
-      );
-    });
-    return mangaDivs;
+      </div>
+    ));
   }
 
-  handleMangaClick(manga) {
+  handleClickManga(manga) {
     this.props.setManga(manga);
+  }
+
+  handleChangeQuery(event) {
+    let query = event.target.value;
+    let queryMangas = this.state.mangas.filter((manga) =>
+      manga.title.includes(query)
+    );
+    this.setState({
+      query: query,
+      queryMangas: queryMangas,
+    });
   }
 
   render() {
     return (
       <div className="MangaView">
-        {this.props.sourceName !== "" && this.state.mangas.length === 0 ? (
+        <input type="text" onChange={this.handleChangeQuery} />
+        {this.state.mangas.length === 0 ? (
           <div className="MangaView-loading">Loading...</div>
         ) : (
           <div className="MangaView-list">{this.getMangaDivs()}</div>
