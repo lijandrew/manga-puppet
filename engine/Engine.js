@@ -8,9 +8,7 @@ const DownloadJob = require("./DownloadJob.js");
 
 const Engine = {
   getSources() {
-    return [
-      MangaLife,
-    ];
+    return [MangaLife];
   },
 
   getSourceNames() {

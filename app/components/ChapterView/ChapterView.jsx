@@ -1,3 +1,8 @@
+// TODO: keep loading gif until ALL information loaded, including chapter list, details, and cover image.
+// Maybe just use a "loadinG" boolean state variable?
+
+// TODO: limit cover image height to save space for chapter list
+
 import React, { Component } from "react";
 const { ipcRenderer } = window.require("electron");
 

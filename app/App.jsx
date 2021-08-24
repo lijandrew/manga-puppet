@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import MangaView from "./components/MangaView/MangaView.jsx";
+import SourceView from "./components/SourceView/SourceView.jsx";
 import "./App.scss";
 
 class App extends Component {
@@ -11,7 +11,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <MangaView />
+        <SourceView />
       </div>
     );
   }

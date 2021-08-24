@@ -4,7 +4,9 @@ const sanitize = require("sanitize-filename");
  * Source superclass. Represents manga sites.
  */
 function Source(name) {
-  this.name = name;
+  // hotfix: name and filename are the same for asset naming consistency
+  // without having to pass filename into electron frontend
+  this.name = sanitize(name);
   this.filename = sanitize(name);
   this.mangas = [];
 
@@ -18,21 +20,6 @@ function Source(name) {
   this.clearCache = async () => {
     this.mangas = [];
   };
-
-  // Maybe cover image urls are more predictable
-  // than I imagined. This operation is now performed
-  // by fetchMangas
-  /*
-  this.getCoverImageUrl = async (manga) => {
-    // Check for cache
-    if (manga.coverImageUrl !== "") {
-      return manga.coverImageUrl;
-    }
-    // Cache
-    manga.coverImageUrl = await this.fetchCoverImageUrl(manga);
-    return manga.coverImageUrl;
-  };
-  */
 
   this.getDetails = async (manga) => {
     // Check for cache
