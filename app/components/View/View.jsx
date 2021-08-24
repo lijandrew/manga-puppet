@@ -31,6 +31,8 @@ class View extends Component {
     this.setItem = this.setItem.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
+
+    this.listRef = React.createRef();
   }
 
   componentDidMount() {
@@ -60,9 +62,14 @@ class View extends Component {
   }
 
   handlePageChange(data) {
-    this.setState({
-      pageIndex: data.selected,
-    });
+    this.setState(
+      {
+        pageIndex: data.selected,
+      },
+      () => {
+        this.listRef.current.scrollTop = 0;
+      }
+    );
   }
 
   setItem(item) {
@@ -102,7 +109,7 @@ class View extends Component {
               <img src={require("../../assets/loading.gif")} />
             </div>
           ) : (
-            <div className="View-list">
+            <div ref={this.listRef} className="View-list">
               {this.getItemDivs(this.state.pages[this.state.pageIndex])}
             </div>
           )}
