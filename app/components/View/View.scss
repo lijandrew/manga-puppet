@@ -1,8 +1,14 @@
 @import "../../variables.scss";
 
 .active {
-  font-weight: bolder;
   text-decoration: underline;
+  font-weight: bolder;
+}
+
+.disabled {
+  cursor: default;
+  pointer-events: none;
+  filter: grayscale(100%);
 }
 
 .View {
@@ -10,10 +16,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-height: 100%;
-  overflow-y: auto;
   width: 100%;
   height: 100%;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .View.hidden {
@@ -27,13 +33,12 @@
 .View-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(175px, max-content));
+  // grid-template-columns: repeat(auto-fill, 175px);
   column-gap: 30px;
   width: 100%;
-  overflow-y: auto;
-
+  // overflow-y: auto;
   box-sizing: border-box;
-  padding: 60px;
-  padding-top: 0;
+  padding: 0 60px;
 }
 
 .View-list-item {
@@ -41,14 +46,17 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  .View-list-item-cover-image {
+    transition: filter 100ms ease-out;
+  }
   &:hover .View-list-item-cover-image {
-    filter: brightness(50%);
+    filter: brightness(30%);
   }
 }
 
 .View-list-item-cover {
   position: relative;
-  background-color: gray;
+  background-color: $purple;
   width: 100%;
   height: 100%;
   display: flex;
@@ -60,7 +68,7 @@
 }
 
 .View-list-item-title {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
   padding: 10px;
   box-sizing: border-box;
   width: 100%;
@@ -73,54 +81,166 @@
 }
 
 .View-pagination {
-  margin: 30px 0;
-  user-select: none;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  &.bottom {
+    margin-top: 0;
+    padding: 60px 0;
+  }
   li {
-    display: inline-block;
+    display: flex;
+    border-radius: 50%;
     a {
-      padding: 10px;
       cursor: pointer;
-      &:hover {
-        background-color: rgba(0, 0, 0, 0.3);
+    }
+    &:not(:nth-child(1)) {
+      &:not(:last-child) {
+        // Styles for page numbers only (exclude previous/next buttons)
+        a {
+          color: white;
+          text-underline-position: under;
+          padding: 8px;
+          transition: background-color 100ms ease-out;
+        }
+        a:hover {
+          text-decoration: underline;
+        }
       }
     }
   }
 }
 
+.View-pagination-control {
+  border-radius: 50%;
+  margin: 0 20px;
+  background-color: $purple;
+  transition: background-color 100ms ease-out;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    background-color: white;
+    img {
+      filter: brightness(30%);
+    }
+  }
+}
+
 .View-header {
-  margin: 30px 0;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 60px 0;
+  background-color: $darkish;
+}
+
+.Viewer-title {
+  font-size: 22px;
+  color: $purple;
+  font-weight: bolder;
+  margin: 60px 0;
 }
 
 .View-input {
   position: relative;
+  border-radius: 30px;
+  overflow: hidden;
   input {
+    border-radius: 30px;
     background-color: $purple;
     outline: 0;
     padding: 20px;
+    padding-right: 50px;
     color: white;
     font-size: 18px;
     font-family: $font-family;
     border: none;
+    min-width: 300px;
     &::placeholder {
       color: white;
-      opacity: .3;
+      opacity: 0.3;
+    }
+  }
+  img {
+    // x.svg
+    position: absolute;
+    right: 15px;
+    bottom: 50%;
+    transform: translateY(50%);
+    transform-origin: center;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: transform 100ms ease-out, opacity 100ms ease-out;
+    &:hover {
+      opacity: 1;
+      transform: translateY(50%) rotate(90deg);
     }
   }
   &::after {
+    pointer-events: none;
     content: "";
     position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 2px;
-    background-color: $lavender;
-    
-    transform: scaleX(0);
-    transform-origin: right;
-    transition: transform 200ms ease-out;
+    left: -120px;
+    bottom: -100px;
+    width: 100px;
+    height: 300%;
+    transform: rotate(20deg);
+    background-color: white;
+    opacity: 0.7;
   }
   &:hover::after {
-    transform-origin: left;
-    transform: scaleX(1);
+    transition: left 400ms ease-in-out;
+    left: calc(100% + 100px);
   }
+}
+
+.View-back {
+  position: fixed;
+  top: 30px;
+  left: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  &::before {
+    z-index: -2;
+    pointer-events: none;
+    content: "";
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    transform: scale(0);
+    border-radius: 50%;
+    background-color: $purple;
+    transition: transform 100ms ease-out;
+  }
+  &:hover {
+    .View-back-button {
+      background-color: white;
+      transform: scale(1.1) rotate(-20deg);
+      img {
+        filter: brightness(30%);
+      }
+    }
+    &::before {
+      transform: scale(1);
+    }
+  }
+}
+
+.View-back-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: 20px;
+  border-radius: 50%;
+  background-color: $purple;
+  transition: background-color 100ms ease-out, transform 100ms ease-out;
 }

@@ -16,6 +16,10 @@ class SourceView extends View {
     );
   }
 
+  getTitleText() {
+    return "Sources";
+  }
+
   getItemDivs(sourceNames) {
     if (!sourceNames) {
       return [];
@@ -31,8 +35,9 @@ class SourceView extends View {
       >
         <div className="View-list-item-cover">
           <LazyLoadImage
+            draggable="false"
             className="View-list-item-cover-image"
-            src={require(`../../assets/${sourceName}.jpg`)} // TODO: source cover image
+            src={require(`../../assets/${sourceName}.jpg`)}
           />
           <div className="View-list-item-title">{sourceName}</div>
         </div>

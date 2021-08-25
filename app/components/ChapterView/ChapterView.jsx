@@ -124,13 +124,16 @@ class ChapterView extends Component {
   render() {
     return (
       <div className="ChapterView">
-        <button
+        <div
+          className="View-back"
           onClick={() => {
             this.props.setManga(null);
           }}
         >
-          Back
-        </button>
+          <div className="View-back-button">
+            <img src={require("../../assets/corner-up-left.svg")} />
+          </div>
+        </div>
         <div className="ChapterView-title">{this.props.manga.title}</div>
         <div className="ChapterView-cover">
           <img src={this.props.manga.coverImageUrl} alt="Cover image" />

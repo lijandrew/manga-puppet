@@ -10,6 +10,7 @@ class View extends Component {
   getItemDivs(items) {}
   getChildComponent() {}
   getBackButton() {}
+  getTitleText() {}
 
   constructor(props) {
     super(props);
@@ -20,18 +21,19 @@ class View extends Component {
       queryItems: [],
       pages: [],
       pageIndex: 0,
-      pageSize: 50,
+      pageSize: 100,
     };
     this.init = this.init.bind(this);
     this.query = this.query.bind(this);
     this.getItemDivs = this.getItemDivs.bind(this);
     this.getItemsPromise = this.getItemsPromise.bind(this);
     this.getChildComponent = this.getChildComponent.bind(this);
+    this.getTitleText = this.getTitleText.bind(this);
     this.setItem = this.setItem.bind(this);
     this.handleQueryChange = this.handleQueryChange.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
 
-    this.listRef = React.createRef();
+    this.viewRef = React.createRef();
   }
 
   componentDidMount() {
@@ -50,14 +52,15 @@ class View extends Component {
     }
     this.setState({
       items: items,
+      query: query,
       queryItems: queryItems,
       pages: pages,
       pageIndex: 0,
     });
   }
 
-  handleQueryChange(event) {
-    this.init(this.state.items, event.target.value);
+  handleQueryChange(query) {
+    this.init(this.state.items, query);
   }
 
   handlePageChange(data) {
@@ -66,7 +69,8 @@ class View extends Component {
         pageIndex: data.selected,
       },
       () => {
-        this.listRef.current.scrollTop = 0;
+        console.log(this.viewRef.current.scrollTop);
+        this.viewRef.current.scrollTop = 0;
       }
     );
   }
@@ -80,34 +84,102 @@ class View extends Component {
   render() {
     return (
       <React.Fragment>
-        <div className={`View${this.state.item ? " hidden" : ""}`}>
-          {this.getBackButton()}
+        <div
+          ref={this.viewRef}
+          className={`View${this.state.item ? " hidden" : ""}`}
+        >
+          <div className="View-header">
+            {this.getBackButton()}
 
-          <div className="View-input">
-            <input type="text" placeholder="Search" onChange={this.handleQueryChange} />
+            <div className="View-input">
+              <input
+                type="text"
+                value={this.state.query}
+                placeholder="Search"
+                onChange={(event) => {
+                  this.handleQueryChange(event.target.value);
+                }}
+              />
+              <img
+                onClick={() => {
+                  this.handleQueryChange("");
+                }}
+                draggable="false"
+                src={require("../../assets/x.svg")}
+              />
+            </div>
+
+            {this.state.pages.length > 1 ? (
+              <ReactPaginate
+                previousLabel={
+                  <div className="View-pagination-control">
+                    <img
+                      draggable="false"
+                      src={require("../../assets/chevron-left.svg")}
+                    />
+                  </div>
+                }
+                nextLabel={
+                  <div className="View-pagination-control">
+                    <img
+                      draggable="false"
+                      src={require("../../assets/chevron-right.svg")}
+                    />
+                  </div>
+                }
+                breakLabel={"..."}
+                forcePage={this.state.pageIndex}
+                pageCount={this.state.pages.length}
+                marginPagesDisplayed={2}
+                pageRangeDisplayed={5}
+                onPageChange={this.handlePageChange}
+                containerClassName={"View-pagination top"}
+                activeClassName={"active"}
+              />
+            ) : (
+              ""
+            )}
           </div>
-
-          <ReactPaginate
-            previousLabel={"<"}
-            nextLabel={">"}
-            breakLabel={"..."}
-            forcePage={this.state.pageIndex}
-            pageCount={this.state.pages.length}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={this.handlePageChange}
-            containerClassName={"View-pagination"}
-            activeClassName={"active"}
-          />
 
           {this.state.items.length === 0 ? (
             <div className="View-loading">
-              <img src={require("../../assets/loading.gif")} />
+              <img
+                draggable="false"
+                src={require("../../assets/loading.gif")}
+              />
             </div>
           ) : (
-            <div ref={this.listRef} className="View-list">
-              {this.getItemDivs(this.state.pages[this.state.pageIndex])}
-            </div>
+            <React.Fragment>
+              <div className="Viewer-title">{this.getTitleText()}</div>
+              <div className="View-list">
+                {this.getItemDivs(this.state.pages[this.state.pageIndex])}
+              </div>
+            </React.Fragment>
+          )}
+
+          {this.state.pages.length > 1 ? (
+            <ReactPaginate
+              previousLabel={
+                <div className="View-pagination-control">
+                  <img src={require("../../assets/chevron-left.svg")} />
+                </div>
+              }
+              nextLabel={
+                <div className="View-pagination-control">
+                  <img src={require("../../assets/chevron-right.svg")} />
+                </div>
+              }
+              breakLabel={"..."}
+              forcePage={this.state.pageIndex}
+              pageCount={this.state.pages.length}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={this.handlePageChange}
+              containerClassName={"View-pagination bottom"}
+              activeClassName={"active"}
+            />
+          ) : (
+            ""
           )}
         </div>
         {this.state.item ? this.getChildComponent() : ""}
