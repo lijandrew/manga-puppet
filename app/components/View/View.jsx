@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import TextField from "@material-ui/core/TextField";
 import ReactPaginate from "react-paginate";
 
 import "./View.scss";
