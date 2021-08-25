@@ -84,12 +84,9 @@ class View extends Component {
         <div className={`View${this.state.item ? " hidden" : ""}`}>
           {this.getBackButton()}
 
-          <TextField
-            onChange={this.handleQueryChange}
-            id="filled-basic"
-            label="Search"
-            variant="filled"
-          />
+          <div className="View-input">
+            <input type="text" placeholder="Search" onChange={this.handleQueryChange} />
+          </div>
 
           <ReactPaginate
             previousLabel={"<"}
