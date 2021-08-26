@@ -73,8 +73,7 @@ class View extends Component {
         pageIndex: data.selected,
       },
       () => {
-        console.log(this.viewRef.current.scrollTop);
-        this.viewRef.current.scrollTop = 0;
+        this.viewRef.current.scrollTo(0, 0);
       }
     );
   }
@@ -95,11 +94,18 @@ class View extends Component {
           {this.getBackButton()}
           <div
             onClick={() => {
-              this.viewRef.current.scrollTop = 0;
+              this.viewRef.current.scrollTo(0, 0);
             }}
-            className={`View-top${this.state.scrollTop > 0 ? " visible" : ""}`}
+            className={`View-scrollTop${
+              this.state.scrollTop > 0 ? " visible" : ""
+            }`}
           >
-            <img draggable="false" src={require("../../assets/arrow-up.svg")} />
+            <div className="View-scrollTop-button">
+              <img
+                draggable="false"
+                src={require("../../assets/arrow-up.svg")}
+              />
+            </div>
           </div>
 
           <div className="View-header">
