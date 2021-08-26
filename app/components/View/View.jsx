@@ -22,6 +22,7 @@ class View extends Component {
       pages: [],
       pageIndex: 0,
       pageSize: 100,
+      scrollTop: 0,
     };
     this.init = this.init.bind(this);
     this.query = this.query.bind(this);
@@ -37,6 +38,9 @@ class View extends Component {
   }
 
   componentDidMount() {
+    this.viewRef.current.onscroll = (event) => {
+      this.setState({ scrollTop: event.target.scrollTop });
+    };
     // Get items and select first one
     this.getItemsPromise().then((items) => {
       this.init(items, this.state.query);
@@ -88,9 +92,17 @@ class View extends Component {
           ref={this.viewRef}
           className={`View${this.state.item ? " hidden" : ""}`}
         >
-          <div className="View-header">
-            {this.getBackButton()}
+          {this.getBackButton()}
+          <div
+            onClick={() => {
+              this.viewRef.current.scrollTop = 0;
+            }}
+            className={`View-top${this.state.scrollTop > 0 ? " visible" : ""}`}
+          >
+            <img draggable="false" src={require("../../assets/arrow-up.svg")} />
+          </div>
 
+          <div className="View-header">
             <div className="View-input">
               <input
                 type="text"
@@ -134,7 +146,7 @@ class View extends Component {
                 pageRangeDisplayed={5}
                 onPageChange={this.handlePageChange}
                 containerClassName={"View-pagination top"}
-                activeClassName={"active"}
+                activeClassName={"pagination-active"}
               />
             ) : (
               ""
@@ -176,7 +188,7 @@ class View extends Component {
               pageRangeDisplayed={5}
               onPageChange={this.handlePageChange}
               containerClassName={"View-pagination bottom"}
-              activeClassName={"active"}
+              activeClassName={"pagination-active"}
             />
           ) : (
             ""
