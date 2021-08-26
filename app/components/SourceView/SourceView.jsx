@@ -7,7 +7,7 @@ import View from "../View/View.jsx";
 
 class SourceView extends View {
   getItemsPromise() {
-    return ipcRenderer.invoke("getSourceNames");
+    return ipcRenderer.invoke("get-source-names");
   }
 
   query(sourceNames, query) {

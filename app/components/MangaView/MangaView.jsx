@@ -7,7 +7,7 @@ import ChapterView from "../ChapterView/ChapterView.jsx";
 
 class MangaView extends View {
   getItemsPromise() {
-    return ipcRenderer.invoke("getMangas", this.props.sourceName);
+    return ipcRenderer.invoke("get-mangas", this.props.sourceName);
   }
 
   query(mangas, query) {

@@ -8,7 +8,7 @@ function DownloadJob(source, manga, chapter, callback) {
   this.manga = manga;
   this.chapter = chapter;
 
-  // I'm usin this to resolve a Promise to signal that download finished
+  // Used in Engine.js to resolve a Promise to signal that download finished
   this.callback = callback;
 
   this.start = async () => {

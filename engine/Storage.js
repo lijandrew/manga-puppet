@@ -16,8 +16,8 @@ const Storage = {
     }
   },
 
-  getLocalChapterFilenames(source, manga) {
-    console.log("Storage:getLocalChapters");
+  getDownloadedChapterFilenames(source, manga) {
+    console.log("Storage:getDownloadedChapterFilenames");
     const mangaPath = path.join(
       Settings.downloadPath,
       source.filename,

@@ -19,8 +19,19 @@ const DownloadManager = {
     while (this.queue.length > 0) {
       // Automatically continue to next job
       console.log("DownloadManager: download");
-      await this.dequeueJob().start();
+      await this.queue[0].start();
+      this.dequeueJob();
     }
+  },
+
+  getDownloadingChapterFilenames(source, manga) {
+    let result = this.queue
+      .filter(
+        (downloadJob) =>
+          source.name === downloadJob.source.name && manga.title === downloadJob.manga.title
+      )
+      .map((downloadJob) => downloadJob.chapter.filename);
+    return result;
   },
 };
 

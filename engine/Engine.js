@@ -25,14 +25,6 @@ const Engine = {
     return source ? source.getMangas() : Promise.resolve([]);
   },
 
-  /*
-  // Returns Promise
-  getCoverImageUrl(sourceName, manga) {
-    const source = this.getSourceByName(sourceName);
-    return source ? source.getCoverImageUrl(manga) : Promise.resolve("");
-  },
-  */
-
   // Returns Promise
   getDetails(sourceName, manga) {
     const source = this.getSourceByName(sourceName);
@@ -55,8 +47,9 @@ const Engine = {
     return this.getSourceByName(sourceName).getChapters(manga);
   },
 
-  // Returns Promise that resolves when download finishes
-  downloadChapter(sourceName, manga, chapter) {
+  // Enqueues a downloadJob with the given callback
+  // The callback is to be used to alert on completion
+  downloadChapter(sourceName, manga, chapter, callback) {
     if (!manga || !chapter) {
       return;
     }
@@ -64,16 +57,11 @@ const Engine = {
     if (!source) {
       return;
     }
-    return new Promise((resolve) => {
-      const downloadJob = new DownloadJob(source, manga, chapter, () => {
-        // Use callback to resolve when download finishes
-        resolve();
-      });
-      DownloadManager.enqueueJob(downloadJob);
-    });
+    const downloadJob = new DownloadJob(source, manga, chapter, callback);
+    DownloadManager.enqueueJob(downloadJob);
   },
 
-  getLocalChapterFilenames(sourceName, manga) {
+  getDownloadingChapterFilenames(sourceName, manga) {
     if (!manga) {
       return;
     }
@@ -81,7 +69,18 @@ const Engine = {
     if (!source) {
       return;
     }
-    return Storage.getLocalChapterFilenames(source, manga);
+    return DownloadManager.getDownloadingChapterFilenames(source, manga);
+  },
+
+  getDownloadedChapterFilenames(sourceName, manga) {
+    if (!manga) {
+      return;
+    }
+    const source = this.getSourceByName(sourceName);
+    if (!source) {
+      return;
+    }
+    return Storage.getDownloadedChapterFilenames(source, manga);
   },
 };
 

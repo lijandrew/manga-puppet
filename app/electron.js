@@ -45,42 +45,60 @@ app.on("window-all-closed", function () {
 
 //////// ipcMain handlers ////////
 
-ipcMain.handle("minimizeApp", (event) => {
+ipcMain.handle("minimize-app", (event) => {
   mainWindow.minimize();
 });
 
-ipcMain.handle("maximizeApp", (event) => {
+ipcMain.handle("maximize-app", (event) => {
   mainWindow.maximize();
 });
 
-ipcMain.handle("restoreApp", (event) => {
+ipcMain.handle("restore-app", (event) => {
   mainWindow.restore();
 });
 
-ipcMain.handle("closeApp", (event) => {
+ipcMain.handle("close-app", (event) => {
   mainWindow.close();
 });
 
-ipcMain.handle("getSourceNames", (event) => {
+ipcMain.handle("get-source-names", (event) => {
   return Engine.getSourceNames();
 });
 
-ipcMain.handle("getMangas", (event, sourceName) => {
+ipcMain.handle("get-mangas", (event, sourceName) => {
   return Engine.getMangas(sourceName);
 });
 
-ipcMain.handle("getChapters", (event, sourceName, manga) => {
+ipcMain.handle("get-chapters", (event, sourceName, manga) => {
   return Engine.getChapters(sourceName, manga);
 });
 
-ipcMain.handle("getDetails", (event, sourceName, manga) => {
+ipcMain.handle("get-details", (event, sourceName, manga) => {
   return Engine.getDetails(sourceName, manga);
 });
 
-ipcMain.handle("downloadChapter", (event, sourceName, manga, chapter) => {
-  return Engine.downloadChapter(sourceName, manga, chapter);
+ipcMain.handle("download-chapter", (event, sourceName, manga, chapter) => {
+  Engine.downloadChapter(sourceName, manga, chapter, () => {
+    // Send message upon finish so frontend knows to mark chapter as downloaded
+    mainWindow.webContents.send(
+      "downloaded-chapter-filenames",
+      Engine.getDownloadedChapterFilenames(sourceName, manga)
+    );
+  });
+
+  return Engine.getDownloadingChapterFilenames(sourceName, manga);
 });
 
-ipcMain.handle("getLocalChapterFilenames", (event, sourceName, manga) => {
-  return Engine.getLocalChapterFilenames(sourceName, manga);
-});
+ipcMain.handle(
+  "get-downloaded-chapter-filenames",
+  (event, sourceName, manga) => {
+    return Engine.getDownloadedChapterFilenames(sourceName, manga);
+  }
+);
+
+ipcMain.handle(
+  "get-downloading-chapter-filenames",
+  (event, sourceName, manga) => {
+    return Engine.getDownloadingChapterFilenames(sourceName, manga);
+  }
+);

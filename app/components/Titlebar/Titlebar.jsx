@@ -22,7 +22,7 @@ class Titlebar extends Component {
 
   render() {
     return (
-      <div class="Titlebar">
+      <div className="Titlebar">
         <div className="Titlebar-logo">
           <div className="Titlebar-maximize">
             <img draggable="false" src={require("../../assets/maximize.svg")} />
@@ -32,7 +32,7 @@ class Titlebar extends Component {
         <div className="Titlebar-group">
           <div
             onClick={() => {
-              ipcRenderer.invoke("minimizeApp");
+              ipcRenderer.invoke("minimize-app");
             }}
             className="Titlebar-minimize"
           >
@@ -42,8 +42,8 @@ class Titlebar extends Component {
           <div
             onClick={() => {
               this.state.maximized
-                ? ipcRenderer.invoke("restoreApp")
-                : ipcRenderer.invoke("maximizeApp");
+                ? ipcRenderer.invoke("restore-app")
+                : ipcRenderer.invoke("maximize-app");
             }}
             className="Titlebar-maximize"
             title={this.state.maximized ? "Restore" : "Maximize"}
@@ -60,7 +60,7 @@ class Titlebar extends Component {
 
           <div
             onClick={() => {
-              ipcRenderer.invoke("closeApp");
+              ipcRenderer.invoke("close-app");
             }}
             className="Titlebar-close"
           >
