@@ -1,5 +1,6 @@
 const Engine = require("../engine/Engine.js");
-const { app, BrowserWindow, ipcMain } = require("electron");
+const Settings = require("../engine/Settings.js");
+const { app, BrowserWindow, ipcMain, shell } = require("electron");
 const path = require("path");
 
 let mainWindow;
@@ -102,3 +103,9 @@ ipcMain.handle(
     return Engine.getDownloadingChapterFilenames(sourceName, manga);
   }
 );
+
+ipcMain.handle("open-manga-folder", (event, sourceName, manga) => {
+  shell.openPath(
+    path.normalize(path.join(Settings.downloadPath, sourceName, manga.filename))
+  );
+});

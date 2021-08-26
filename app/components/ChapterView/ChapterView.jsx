@@ -34,6 +34,7 @@ class ChapterView extends Component {
     this.getDownloadingChapterFilenamesPromise =
       this.getDownloadingChapterFilenamesPromise.bind(this);
     this.handleDownloadClick = this.handleDownloadClick.bind(this);
+    this.handleFolderClick = this.handleFolderClick.bind(this);
   }
 
   componentDidMount() {
@@ -110,8 +111,6 @@ class ChapterView extends Component {
   handleDownloadClick(chapter) {
     this.getDownloadChapterPromise(chapter).then(
       (downloadingChapterFilenames) => {
-        console.log("downloading:");
-        console.log(downloadingChapterFilenames);
         this.setState({
           downloadingChapterFilenames: downloadingChapterFilenames,
         });
@@ -119,22 +118,44 @@ class ChapterView extends Component {
     );
   }
 
+  handleFolderClick() {
+    ipcRenderer.invoke(
+      "open-manga-folder",
+      this.props.sourceName,
+      this.props.manga
+    );
+  }
+
   getChapterStatus(chapter) {
     if (this.state.downloadedChapterFilenames.includes(chapter.filename)) {
-      return <div>Already downloaded</div>;
+      return (
+        <div
+          onClick={this.handleFolderClick}
+          className="ChapterView-list-entry-status-downloaded"
+          title="Show in folder"
+        >
+          <img draggable="false" src={require("../../assets/folder.svg")} />
+        </div>
+      );
     } else if (
       this.state.downloadingChapterFilenames.includes(chapter.filename)
     ) {
-      return <div>Downloading</div>;
+      return (
+        <div className="ChapterView-list-entry-status-downloading">
+          <img draggable="false" src={require("../../assets/loader.svg")} />
+        </div>
+      );
     }
     return (
-      <button
+      <div
         onClick={() => {
           this.handleDownloadClick(chapter);
         }}
+        className="ChapterView-list-entry-status-download"
+        title={`Download ${chapter.title}`}
       >
-        Download
-      </button>
+        <img draggable="false" src={require("../../assets/download.svg")} />
+      </div>
     );
   }
 
@@ -144,8 +165,7 @@ class ChapterView extends Component {
       return (
         <div className="ChapterView-list-entry" key={`chapter-${i++}`}>
           <div className="ChapterView-list-entry-title">{chapter.title}</div>
-          <div className="ChapterView-list-entry-group">
-            {/* TODO: "open in folder" button */}
+          <div className="ChapterView-list-entry-status">
             {this.getChapterStatus(chapter)}
           </div>
         </div>
