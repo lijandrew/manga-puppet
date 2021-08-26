@@ -4,8 +4,9 @@
   "description": "Manga downloader",
   "main": "app/electron.js",
   "scripts": {
+    "start": "concurrently --kill-others -c cyan,yellow -n react,electron npm:serve npm:electron",
     "electron": "electron .",
-    "watch": "webpack serve",
+    "serve": "webpack serve",
     "engine-test": "node ./engineTest.js"
   },
   "author": "Andrew Li",
@@ -27,6 +28,7 @@
     "@babel/preset-react": "^7.14.5",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
+    "concurrently": "^6.2.1",
     "css-loader": "^6.2.0",
     "electron": "^13.2.1",
     "electron-packager": "^15.3.0",
