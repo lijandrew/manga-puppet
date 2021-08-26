@@ -1,0 +1,54 @@
+@import "../../variables.scss";
+
+.Titlebar {
+  -webkit-app-region: drag;
+  z-index: 999;
+  display: flex;
+  justify-content: space-between;
+  background-color: $darkish;
+  width: 100%;
+}
+
+.Titlebar-logo {
+  -webkit-app-region: no-drag;
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    img {
+      max-width: 100%;
+      width: 20px;
+    }
+  }
+}
+
+.Titlebar-group {
+  -webkit-app-region: no-drag;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 12px;
+    img {
+      max-width: 100%;
+    }
+    &:hover {
+      background-color: $purple;
+    }
+  }
+}
+
+.Titlebar-minimize img {
+  width: 20px;
+}
+
+.Titlebar-maximize img {
+  width: 15px;
+}
+
+.Titlebar-close img {
+  width: 20px;
+}

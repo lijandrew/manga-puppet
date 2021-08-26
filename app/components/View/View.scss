@@ -156,7 +156,7 @@
   align-items: center;
   width: 100%;
   padding: 60px 0;
-  background-color: $darkish;
+  background-color: $dark;
 }
 
 .Viewer-title {
@@ -224,7 +224,7 @@
 .View-back {
   z-index: 99;
   position: fixed;
-  top: 30px;
+  top: 60px;
   left: 30px;
   display: flex;
   justify-content: center;
