@@ -1,15 +1,62 @@
 import React, { Component } from "react";
 import ReactPaginate from "react-paginate";
-
-const { ipcRenderer } = window.require("electron");
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { Link, Route } from "react-router-dom";
+const { ipcRenderer } = window.require("electron");
 
 import MangaView from "../MangaView/MangaView.jsx";
 import "../View/View.scss";
 
 class SourceView extends Component {
-  getItemsPromise() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      query: "",
+      sourceNames: [],
+      sourceName: null,
+      querySourceNames: [],
+      pages: [],
+      pageIndex: 0,
+      pageSize: 100,
+      scrollTop: 0,
+    };
+    this.init = this.init.bind(this);
+    this.query = this.query.bind(this);
+    this.getSourceNameDivs = this.getSourceNameDivs.bind(this);
+    this.getSourceNamesPromise = this.getSourceNamesPromise.bind(this);
+    this.setSourceName = this.setSourceName.bind(this);
+    this.handleQueryChange = this.handleQueryChange.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
+
+    this.viewRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.viewRef.current.onscroll = (event) => {
+      this.setState({ scrollTop: event.target.scrollTop });
+    };
+    // Get sourceNames and select first one
+    this.getSourceNamesPromise().then((sourceNames) => {
+      this.init(sourceNames, this.state.query);
+    });
+  }
+
+  // (Re)calculates query results and pagination and resets pageIndex
+  init(sourceNames, query) {
+    let querySourceNames = this.query(sourceNames, query);
+    let pages = [];
+    for (let i = 0; i < querySourceNames.length; i += this.state.pageSize) {
+      pages.push(querySourceNames.slice(i, i + this.state.pageSize));
+    }
+    this.setState({
+      sourceNames: sourceNames,
+      query: query,
+      querySourceNames: querySourceNames,
+      pages: pages,
+      pageIndex: 0,
+    });
+  }
+
+  getSourceNamesPromise() {
     return ipcRenderer.invoke("get-source-names");
   }
 
@@ -19,11 +66,7 @@ class SourceView extends Component {
     );
   }
 
-  getTitleText() {
-    return "Sources";
-  }
-
-  getItemDivs(sourceNames) {
+  getSourceNameDivs(sourceNames) {
     if (!sourceNames) {
       return [];
     }
@@ -31,7 +74,7 @@ class SourceView extends Component {
     return sourceNames.map((sourceName) => (
       <div
         onClick={() => {
-          this.setItem(sourceName);
+          this.setSourceName(sourceName);
         }}
         className="View-list-item"
         key={`source-${i++}`}
@@ -47,70 +90,8 @@ class SourceView extends Component {
     ));
   }
 
-  getChildComponent() {
-    return (
-      <MangaView sourceName={this.state.item} setSourceName={this.setItem} />
-    );
-  }
-
-  getBackButton() {
-    return "";
-  }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: "",
-      items: [],
-      item: null,
-      queryItems: [],
-      pages: [],
-      pageIndex: 0,
-      pageSize: 100,
-      scrollTop: 0,
-    };
-    this.init = this.init.bind(this);
-    this.query = this.query.bind(this);
-    this.getItemDivs = this.getItemDivs.bind(this);
-    this.getItemsPromise = this.getItemsPromise.bind(this);
-    this.getChildComponent = this.getChildComponent.bind(this);
-    this.getTitleText = this.getTitleText.bind(this);
-    this.setItem = this.setItem.bind(this);
-    this.handleQueryChange = this.handleQueryChange.bind(this);
-    this.handlePageChange = this.handlePageChange.bind(this);
-
-    this.viewRef = React.createRef();
-  }
-
-  componentDidMount() {
-    console.log(this.props);
-    this.viewRef.current.onscroll = (event) => {
-      this.setState({ scrollTop: event.target.scrollTop });
-    };
-    // Get items and select first one
-    this.getItemsPromise().then((items) => {
-      this.init(items, this.state.query);
-    });
-  }
-
-  // (Re)calculates query results and pagination and resets pageIndex
-  init(items, query) {
-    let queryItems = this.query(items, query);
-    let pages = [];
-    for (let i = 0; i < queryItems.length; i += this.state.pageSize) {
-      pages.push(queryItems.slice(i, i + this.state.pageSize));
-    }
-    this.setState({
-      items: items,
-      query: query,
-      queryItems: queryItems,
-      pages: pages,
-      pageIndex: 0,
-    });
-  }
-
   handleQueryChange(query) {
-    this.init(this.state.items, query);
+    this.init(this.state.sourceNames, query);
   }
 
   handlePageChange(data) {
@@ -124,9 +105,9 @@ class SourceView extends Component {
     );
   }
 
-  setItem(item) {
+  setSourceName(sourceName) {
     this.setState({
-      item: item,
+      sourceName: sourceName,
     });
   }
 
@@ -135,9 +116,8 @@ class SourceView extends Component {
       <React.Fragment>
         <div
           ref={this.viewRef}
-          className={`View${this.state.item ? " hidden" : ""}`}
+          className={`View${this.state.sourceName ? " hidden" : ""}`}
         >
-          {this.getBackButton()}
           <div
             onClick={() => {
               this.viewRef.current.scrollTo(0, 0);
@@ -198,14 +178,14 @@ class SourceView extends Component {
           </div>
 
           <React.Fragment>
-            <div className="Viewer-title">{this.getTitleText()}</div>
+            <div className="Viewer-title">Sources</div>
             <div className="View-list">
-              {this.state.items.length === 0 ? (
+              {this.state.sourceNames.length === 0 ? (
                 <div className="View-loading">
                   <img src={require("../../assets/images/loading.gif")} />
                 </div>
               ) : (
-                this.getItemDivs(this.state.pages[this.state.pageIndex])
+                this.getSourceNameDivs(this.state.pages[this.state.pageIndex])
               )}
             </div>
           </React.Fragment>
@@ -235,7 +215,14 @@ class SourceView extends Component {
             ""
           )}
         </div>
-        {this.state.item ? this.getChildComponent() : ""}
+        {this.state.sourceName ? (
+          <MangaView
+            sourceName={this.state.sourceName}
+            setSourceName={this.setSourceName}
+          />
+        ) : (
+          ""
+        )}
       </React.Fragment>
     );
   }
