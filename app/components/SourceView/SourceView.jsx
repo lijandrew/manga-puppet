@@ -178,7 +178,7 @@ class SourceView extends Component {
           </div>
 
           <React.Fragment>
-            <div className="Viewer-title">Sources</div>
+            <div className="View-title">Sources</div>
             <div className="View-list">
               {this.state.sourceNames.length === 0 ? (
                 <div className="View-loading">
