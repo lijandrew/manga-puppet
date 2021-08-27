@@ -11,17 +11,19 @@ function createWindow() {
     height: 800,
     minWidth: 725,
     minHeight: 520,
-    frame: false,
+    // frame: false,
+    icon: path.join(__dirname, "icon.png"),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
   });
+  // mainWindow.removeMenu();
+  mainWindow.loadFile(path.join(__dirname, "..", "public", "index.html"));
+  mainWindow.setBackgroundColor("#161616");
   mainWindow.on("closed", () => {
     app.quit();
   });
-  mainWindow.loadFile(path.join(__dirname, "..", "public", "index.html"));
-  mainWindow.setBackgroundColor("#161616");
 }
 
 app.whenReady().then(() => {

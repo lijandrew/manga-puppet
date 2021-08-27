@@ -3,19 +3,9 @@ const DownloadJob = require("./engine/DownloadJob.js");
 const DownloadManager = require("./engine/DownloadManager.js");
 
 async function main() {
-  let mangas = await MangaLife.getMangas();
-  let manga = mangas[0];
-  
-  /*
-  let chapters = await MangaLife.getChapters(manga);
-  let chapter = chapters[0];
-
-  let jobs = [new DownloadJob(MangaLife, manga, chapter)];
-
-  jobs.forEach((downloadJob) => {
-    DownloadManager.enqueueJob(downloadJob);
-  });
-  */
+  const manga = await MangaLife.getMangaById("Tales-Of-Demons-And-Gods");
+  let details = await MangaLife.getDetails(manga);
+  console.log(details);
 }
 
 main();

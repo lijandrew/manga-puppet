@@ -187,25 +187,32 @@ class ChapterView extends Component {
             <img src={require("../../assets/icons/corner-up-left.svg")} />
           </div>
         </div>
-        <div className="ChapterView-title">{this.props.manga.title}</div>
-        <div className="ChapterView-cover">
-          <img src={this.props.manga.coverImageUrl} alt="Cover image" />
-        </div>
-        <div className="ChapterView-details">
-          <div className="ChapterView-details-authors">
-            {this.state.details.authors}
+        <div className="ChapterView-header">
+          <div className="ChapterView-title">{this.props.manga.title}</div>
+          <div className="ChapterView-cover">
+            <img src={this.props.manga.coverImageUrl} alt="Cover image" />
           </div>
-          <div className="ChapterView-details-genres">
-            {this.state.details.genres}
-          </div>
-          <div className="ChapterView-details-releasedate">
-            {this.state.details.releasedate}
-          </div>
-          <div className="ChapterView-details-status">
-            {this.state.details.status}
-          </div>
-          <div className="ChapterView-details-description">
-            {this.state.details.description}
+          <div className="ChapterView-details">
+            <div className="ChapterView-details-authors">
+              <span>Author(s): </span>
+              {this.state.details.authors}
+            </div>
+            <div className="ChapterView-details-genres">
+              <span>Genres(s): </span>
+              {this.state.details.genres}
+            </div>
+            <div className="ChapterView-details-releasedate">
+              <span>Released: </span>
+              {this.state.details.releasedate}
+            </div>
+            <div className="ChapterView-details-status">
+              <span>Status: </span>
+              {this.state.details.status}
+            </div>
+            <div className="ChapterView-details-description">
+              <span>Description: </span>
+              {this.state.details.description}
+            </div>
           </div>
         </div>
 

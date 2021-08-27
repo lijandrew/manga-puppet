@@ -9,15 +9,16 @@
 
 .Titlebar-logo {
   -webkit-app-region: no-drag;
-  div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 6px;
-    img {
-      max-width: 100%;
-      width: 20px;
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
+  img {
+    max-width: 100%;
+    width: 20px;
+  }
+  span {
+    color: white;
   }
 }
 

@@ -11,7 +11,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 5px 30px;
+  padding: 0px 30px;
   color: white;
 }
 
@@ -21,7 +21,7 @@
     img {
       width: 20px;
       filter: grayscale(0) brightness(100%);
-      transition: filter 200ms ease-out;
+      transition: filter 100ms ease-out;
       will-change: filter;
     }
   }
@@ -46,4 +46,13 @@
 
 .ChapterView-list-entry-status-downloading img {
   animation: spin 1000ms infinite;
+}
+
+.ChapterView-details {
+  div {
+    color: white;
+    span {
+      font-weight: bolder;
+    }
+  }
 }

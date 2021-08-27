@@ -24,9 +24,8 @@ class Titlebar extends Component {
     return (
       <div className="Titlebar">
         <div className="Titlebar-logo">
-          <div className="Titlebar-maximize">
-            <img src={require("../../assets/icons/maximize.svg")} />
-          </div>
+          <img src={require("../../../electron/icon.png")} />
+          <span>Manga Puppet</span>
         </div>
 
         <div className="Titlebar-group">
