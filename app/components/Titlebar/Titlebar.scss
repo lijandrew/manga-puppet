@@ -1,11 +1,9 @@
-@import "../../variables.scss";
-
 .Titlebar {
   -webkit-app-region: drag;
   z-index: 999;
   display: flex;
   justify-content: space-between;
-  background-color: $darkish;
+  background-color: #2a272c;
   width: 100%;
 }
 
@@ -31,12 +29,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 6px 12px;
+    padding: 6px 18px;
     img {
       max-width: 100%;
     }
     &:hover {
-      background-color: $purple;
+      background-color: var(--purple);
     }
   }
 }

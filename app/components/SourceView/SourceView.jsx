@@ -35,9 +35,8 @@ class SourceView extends View {
       >
         <div className="View-list-item-cover">
           <LazyLoadImage
-            draggable="false"
             className="View-list-item-cover-image"
-            src={require(`../../assets/${sourceName}.jpg`)}
+            src={require(`../../assets/sources/${sourceName}.jpg`)}
           />
           <div className="View-list-item-title">{sourceName}</div>
         </div>

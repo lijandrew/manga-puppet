@@ -25,7 +25,7 @@ class Titlebar extends Component {
       <div className="Titlebar">
         <div className="Titlebar-logo">
           <div className="Titlebar-maximize">
-            <img draggable="false" src={require("../../assets/maximize.svg")} />
+            <img src={require("../../assets/icons/maximize.svg")} />
           </div>
         </div>
 
@@ -36,7 +36,7 @@ class Titlebar extends Component {
             }}
             className="Titlebar-minimize"
           >
-            <img draggable="false" src={require("../../assets/minimize.svg")} />
+            <img src={require("../../assets/icons/minimize.svg")} />
           </div>
 
           <div
@@ -49,11 +49,10 @@ class Titlebar extends Component {
             title={this.state.maximized ? "Restore" : "Maximize"}
           >
             <img
-              draggable="false"
               src={
                 this.state.maximized
-                  ? require("../../assets/restore.svg")
-                  : require("../../assets/maximize.svg")
+                  ? require("../../assets/icons/restore.svg")
+                  : require("../../assets/icons/maximize.svg")
               }
             />
           </div>
@@ -64,7 +63,7 @@ class Titlebar extends Component {
             }}
             className="Titlebar-close"
           >
-            <img draggable="false" src={require("../../assets/x.svg")} />
+            <img src={require("../../assets/icons/x.svg")} />
           </div>
         </div>
       </div>

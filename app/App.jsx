@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-const { ipcRenderer } = window.require("electron");
 
 import Titlebar from "./components/Titlebar/Titlebar.jsx";
 import SourceView from "./components/SourceView/SourceView.jsx";
@@ -19,5 +18,4 @@ class App extends Component {
     );
   }
 }
-
 export default App;

@@ -17,7 +17,7 @@ class MangaView extends View {
   }
 
   getTitleText() {
-    return "Mangas";
+    return "Browsing " + this.props.sourceName;
   }
 
   getItemDivs(mangas) {
@@ -35,7 +35,6 @@ class MangaView extends View {
       >
         <div className="View-list-item-cover">
           <LazyLoadImage
-            draggable="false"
             className="View-list-item-cover-image"
             src={manga.coverImageUrl}
           />
@@ -64,7 +63,7 @@ class MangaView extends View {
         }}
       >
         <div className="View-back-button">
-          <img src={require("../../assets/corner-up-left.svg")} />
+          <img src={require("../../assets/icons/corner-up-left.svg")} />
         </div>
       </div>
     );

@@ -2,7 +2,7 @@
   "name": "manga-puppet",
   "version": "1.0.0",
   "description": "Manga downloader",
-  "main": "app/electron.js",
+  "main": "electron/electron.js",
   "scripts": {
     "start": "concurrently --kill-others -c cyan,yellow -n react,electron npm:serve npm:electron",
     "electron": "electron .",
@@ -33,9 +33,9 @@
     "electron": "^13.2.1",
     "electron-packager": "^15.3.0",
     "html-webpack-plugin": "^5.3.2",
+    "mini-css-extract-plugin": "^2.2.0",
     "node-sass": "^6.0.1",
     "sass-loader": "^12.1.0",
-    "style-loader": "^3.2.1",
     "webpack": "^5.50.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^3.11.2"

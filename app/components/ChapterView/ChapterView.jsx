@@ -134,7 +134,7 @@ class ChapterView extends Component {
           className="ChapterView-list-entry-status-downloaded"
           title="Show in folder"
         >
-          <img draggable="false" src={require("../../assets/folder.svg")} />
+          <img src={require("../../assets/icons/folder.svg")} />
         </div>
       );
     } else if (
@@ -142,7 +142,7 @@ class ChapterView extends Component {
     ) {
       return (
         <div className="ChapterView-list-entry-status-downloading">
-          <img draggable="false" src={require("../../assets/loader.svg")} />
+          <img src={require("../../assets/icons/loader.svg")} />
         </div>
       );
     }
@@ -154,7 +154,7 @@ class ChapterView extends Component {
         className="ChapterView-list-entry-status-download"
         title={`Download ${chapter.title}`}
       >
-        <img draggable="false" src={require("../../assets/download.svg")} />
+        <img src={require("../../assets/icons/download.svg")} />
       </div>
     );
   }
@@ -184,7 +184,7 @@ class ChapterView extends Component {
           }}
         >
           <div className="View-back-button">
-            <img src={require("../../assets/corner-up-left.svg")} />
+            <img src={require("../../assets/icons/corner-up-left.svg")} />
           </div>
         </div>
         <div className="ChapterView-title">{this.props.manga.title}</div>
@@ -211,7 +211,7 @@ class ChapterView extends Component {
 
         {this.state.chapters.length === 0 ? (
           <div className="ChapterView-loading">
-            <img src={require("../../assets/loading.gif")} />
+            <img src={require("../../assets/images/loading.gif")} />
           </div>
         ) : (
           <div className="ChapterView-list">{this.getChapterDivs()}</div>

@@ -1,4 +1,30 @@
-@import "./variables.scss";
+// Variables
+:root {
+  --light: #dfe6e9;
+  --darkish: #19191a;
+  --dark: #111111;
+  --purple: #6c5ce7;
+  --purple-opacity: rgba(108, 92, 231, 0.9);
+  --lavender: #a29bfe;
+  --font-family: "Noto Sans JP", sans-serif;
+
+  @font-face {
+    font-family: "Noto Sans JP";
+    src: url("./assets/fonts/NotoSansJP-Regular.otf") format("otf");
+  }
+
+  @font-face {
+    font-family: "Noto Sans JP";
+    src: url("./assets/fonts/NotoSansJP-Thin.otf") format("otf");
+    font-weight: lighter;
+  }
+
+  @font-face {
+    font-family: "Noto Sans JP";
+    src: url("./assets/fonts/NotoSansJP-Bold.otf") format("otf");
+    font-weight: bolder;
+  }
+}
 
 * {
   margin: 0;
@@ -12,9 +38,13 @@ body,
 #root > div {
   width: 100%;
   height: 100%;
-  font-family: $font-family;
-  background-color: $darkish;
+  font-family: var(--font-family);
+  background-color: var(--darkish);
   font-size: 18px;
+}
+
+img {
+  -webkit-user-drag: none;
 }
 
 a {
@@ -31,12 +61,12 @@ a {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: $purple;
+  background-color: var(--purple);
   border-radius: 20px;
   border: 6px solid transparent;
   background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background-color: $lavender;
+  background-color: var(--lavender);
 }

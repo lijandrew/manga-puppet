@@ -1,5 +1,3 @@
-@import "../../variables.scss";
-
 .View {
   box-sizing: border-box;
   display: flex;
@@ -36,7 +34,7 @@
   cursor: pointer;
   .View-list-item-cover {
     position: relative;
-    background-color: $purple;
+    background-color: var(--purple);
     width: 100%;
     height: 100%;
     display: flex;
@@ -49,9 +47,11 @@
       transform: translate(-50%, -50%);
       width: 100%;
       height: 100%;
-      background-color: $purple;
+      background-color: var(--purple);
       transition: width 200ms ease-out, height 200ms ease-out;
       will-change: width, height;
+      // transition: transform 200ms ease-out;
+      // will-change: transform;
     }
     .View-list-item-cover-image {
       position: relative;
@@ -61,24 +61,37 @@
       max-width: 100%;
     }
   }
-  &:hover .View-list-item-cover::before {
-    // transform: scale(1.1);
-    width: calc(100% + 30px);
-    height: calc(100% + 30px);
+  &:hover {
+    .View-list-item-cover::before {
+      width: calc(100% + 30px);
+      height: calc(100% + 30px);
+      // transform: translate(calc(-50% - 10px), calc(-50% - 10px));
+    }
+    .View-list-item-title {
+      background-color: rgba(255, 255, 255, 0.9);
+      color: var(--purple);
+    }
   }
 }
 
 .View-list-item-title {
-  background-color: rgba(0, 0, 0, 0.8);
-  padding: 10px;
-  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
   width: 100%;
   max-width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
   color: white;
   font-weight: bolder;
   text-align: center;
-  position: absolute;
-  bottom: 0;
+  // background-color: rgba(0, 0, 0, 0.9);
+  background-color: var(--purple-opacity);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+  transition: background-color 200ms ease-out, color 200ms ease-out;
+  will-change: background-color, color;
 }
 
 .View-pagination {
@@ -103,7 +116,7 @@
       &:not(:last-child) {
         // Styles for page numbers only (exclude previous/next buttons)
         a {
-          color: $purple;
+          color: var(--purple);
           font-weight: bolder;
           text-underline-position: under;
           padding: 8px;
@@ -120,7 +133,7 @@
 .View-pagination-control {
   border-radius: 50%;
   margin: 0 20px;
-  background-color: $purple;
+  background-color: var(--purple);
   transition: background-color 200ms ease-out;
   will-change: background-color;
   padding: 10px;
@@ -156,12 +169,12 @@
   align-items: center;
   width: 100%;
   padding: 60px 0;
-  background-color: $dark;
+  background-color: var(--dark);
 }
 
 .Viewer-title {
   font-size: 22px;
-  color: $purple;
+  color: white;
   font-weight: bolder;
   margin: 60px 0;
 }
@@ -172,13 +185,13 @@
   overflow: hidden;
   input {
     border-radius: 30px;
-    background-color: $purple;
+    background-color: var(--purple);
     outline: 0;
     padding: 20px;
     padding-right: 50px;
     color: white;
     font-size: 18px;
-    font-family: $font-family;
+    font-family: var(--font-family);
     border: none;
     min-width: 300px;
     &::placeholder {
@@ -188,6 +201,7 @@
   }
   img {
     // x.svg
+    -webkit-user-drag: none;
     position: absolute;
     right: 15px;
     bottom: 50%;
@@ -239,7 +253,7 @@
     height: 250px;
     transform: scale(0);
     border-radius: 50%;
-    background-color: $purple;
+    background-color: var(--purple);
     transition: transform 200ms ease-out;
     will-change: transform;
   }
@@ -266,7 +280,7 @@
     cursor: pointer;
     padding: 20px;
     border-radius: 50%;
-    background-color: $purple;
+    background-color: var(--purple);
     transition: background-color 200ms ease-out, transform 200ms ease-out;
     will-change: background-color, transform;
   }
@@ -296,7 +310,7 @@
     height: 200px;
     transform: scale(0);
     border-radius: 50%;
-    background-color: $purple;
+    background-color: var(--purple);
     transition: transform 200ms ease-out;
     will-change: transform;
   }
@@ -321,7 +335,7 @@
     justify-content: center;
     align-items: center;
     padding: 10px;
-    background-color: $purple;
+    background-color: var(--purple);
     border-radius: 50%;
     transform-origin: center;
     transition: background-color 200ms ease-out;

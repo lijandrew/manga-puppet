@@ -102,8 +102,7 @@ class View extends Component {
           >
             <div className="View-scrollTop-button">
               <img
-                draggable="false"
-                src={require("../../assets/arrow-up.svg")}
+                src={require("../../assets/icons/arrow-up.svg")}
               />
             </div>
           </div>
@@ -122,8 +121,7 @@ class View extends Component {
                 onClick={() => {
                   this.handleQueryChange("");
                 }}
-                draggable="false"
-                src={require("../../assets/x.svg")}
+                src={require("../../assets/icons/x.svg")}
               />
             </div>
 
@@ -132,16 +130,14 @@ class View extends Component {
                 previousLabel={
                   <div className="View-pagination-control">
                     <img
-                      draggable="false"
-                      src={require("../../assets/chevron-left.svg")}
+                      src={require("../../assets/icons/chevron-left.svg")}
                     />
                   </div>
                 }
                 nextLabel={
                   <div className="View-pagination-control">
                     <img
-                      draggable="false"
-                      src={require("../../assets/chevron-right.svg")}
+                      src={require("../../assets/icons/chevron-right.svg")}
                     />
                   </div>
                 }
@@ -159,32 +155,31 @@ class View extends Component {
             )}
           </div>
 
-          {this.state.items.length === 0 ? (
-            <div className="View-loading">
-              <img
-                draggable="false"
-                src={require("../../assets/loading.gif")}
-              />
+          <React.Fragment>
+            <div className="Viewer-title">{this.getTitleText()}</div>
+            <div className="View-list">
+              {this.state.items.length === 0 ? (
+                <div className="View-loading">
+                  <img
+                    src={require("../../assets/images/loading.gif")}
+                  />
+                </div>
+              ) : (
+                this.getItemDivs(this.state.pages[this.state.pageIndex])
+              )}
             </div>
-          ) : (
-            <React.Fragment>
-              <div className="Viewer-title">{this.getTitleText()}</div>
-              <div className="View-list">
-                {this.getItemDivs(this.state.pages[this.state.pageIndex])}
-              </div>
-            </React.Fragment>
-          )}
+          </React.Fragment>
 
           {this.state.pages.length > 1 ? (
             <ReactPaginate
               previousLabel={
                 <div className="View-pagination-control">
-                  <img src={require("../../assets/chevron-left.svg")} />
+                  <img src={require("../../assets/icons/chevron-left.svg")} />
                 </div>
               }
               nextLabel={
                 <div className="View-pagination-control">
-                  <img src={require("../../assets/chevron-right.svg")} />
+                  <img src={require("../../assets/icons/chevron-right.svg")} />
                 </div>
               }
               breakLabel={"..."}
