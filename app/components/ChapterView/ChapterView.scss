@@ -1,10 +1,23 @@
 .ChapterView {
   // Necessary for remembering MangaView scroll distance
   overflow-y: auto;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
-.ChapterView-loading img {
-  max-width: 100%;
+.ChapterView-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: 300px;
+    max-width: 100%;
+  }
+}
+
+.ChapterView-list {
+  overflow-y: auto;
 }
 
 .ChapterView-list-entry {
@@ -13,6 +26,14 @@
   align-items: center;
   padding: 0px 30px;
   color: white;
+  &:nth-child(odd) {
+    background-color: var(--dark);
+  }
+}
+
+.ChapterView-list-entry-title {
+  white-space: nowrap;
+  font-weight: bolder;
 }
 
 .ChapterView-list-entry-status {
@@ -48,11 +69,36 @@
   animation: spin 1000ms infinite;
 }
 
+.ChapterView-header {
+  position: relative;
+  padding: 30px;
+  background-color: var(--dark);
+  overflow-y: auto;
+}
+
+.ChapterView-cover {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  img {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
 .ChapterView-details {
   div {
+    padding: 10px 0;
     color: white;
+    border-bottom: 1px solid white;
     span {
       font-weight: bolder;
+      color: var(--purple);
     }
   }
+}
+
+.ChapterView-title {
+  font-size: 32px;
+  font-weight: bolder;
 }

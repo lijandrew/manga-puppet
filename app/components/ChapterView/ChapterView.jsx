@@ -188,11 +188,11 @@ class ChapterView extends Component {
           </div>
         </div>
         <div className="ChapterView-header">
-          <div className="ChapterView-title">{this.props.manga.title}</div>
           <div className="ChapterView-cover">
             <img src={this.props.manga.coverImageUrl} alt="Cover image" />
           </div>
           <div className="ChapterView-details">
+            <div className="ChapterView-title">{this.props.manga.title}</div>
             <div className="ChapterView-details-authors">
               <span>Author(s): </span>
               {this.state.details.authors}
