@@ -141,7 +141,10 @@ class ChapterView extends Component {
       this.state.downloadingChapterFilenames.includes(chapter.filename)
     ) {
       return (
-        <div className="ChapterView-list-entry-status-downloading">
+        <div
+          title="Download in progress"
+          className="ChapterView-list-entry-status-downloading"
+        >
           <img src={require("../../assets/icons/loader.svg")} />
         </div>
       );

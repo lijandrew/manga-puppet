@@ -18,7 +18,7 @@ function createWindow() {
       contextIsolation: false,
     },
   });
-  // mainWindow.removeMenu();
+  mainWindow.removeMenu();
   mainWindow.loadFile(path.join(__dirname, "..", "public", "index.html"));
   mainWindow.setBackgroundColor("#161616");
   mainWindow.on("closed", () => {
