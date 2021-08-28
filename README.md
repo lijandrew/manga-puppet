@@ -9,7 +9,6 @@
   </a>
   <br />
 </div>
-
 <br />
 
 ## **Table of Contents**
@@ -20,19 +19,13 @@
 [Contributing](#contributing)  
 [License](#license)
 
-<br />
-
 ## **Download**
 
 &rarr; Coming very soon!
 
-<br />
-
 ## **Why?**
 
 Many scrapers and downloaders consist of crammed buttons, text lists, and configurations that some may find overwhelming. Manga Puppet is made **with consideration for newcomers to manga downloading**, or really, anyone who would like a **more visually-pleasing experience**. Manga Puppet aims to be a sleek, accessible, and user-friendly option that sacrifices a little more bandwidth usage and some extra clicks in return for a richer browsing experience (cover images, manga descriptions, etc.) and easier-to-navigate interface.
-
-<br />
 
 ## **Screenshots**
 
@@ -40,16 +33,10 @@ Many scrapers and downloaders consist of crammed buttons, text lists, and config
 ![Chapters view screenshot](screenshots/chapters.png)
 ![Sources view screenshot](screenshots/sources.png)
 
-<br />
-
 ## **Contributing**
 
 PRs are appreciated!
 
-<br />
-
 ## **License**
 
 MIT
-
-<br />
