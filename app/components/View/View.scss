@@ -195,8 +195,11 @@
 
 .View-title {
   color: white;
-  opacity: 0.3;
+  opacity: 0.5;
   margin-bottom: 60px;
+  span {
+    font-weight: bolder;
+  }
 }
 
 .View-input {

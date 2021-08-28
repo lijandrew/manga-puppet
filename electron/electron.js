@@ -11,14 +11,13 @@ function createWindow() {
     height: 800,
     minWidth: 725,
     minHeight: 520,
-    // frame: false,
-    icon: path.join(__dirname, "icon.png"),
+    autoHideMenuBar: true,
+    icon: path.join(__dirname, "logo.png"),
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
     },
   });
-  mainWindow.removeMenu();
   mainWindow.loadFile(path.join(__dirname, "..", "public", "index.html"));
   mainWindow.setBackgroundColor("#161616");
   mainWindow.on("closed", () => {
@@ -32,6 +31,7 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 
+  /*
   // Inform frontend of whether window is maximized or not
   mainWindow.on("maximize", () => {
     mainWindow.webContents.send("isMaximized");
@@ -40,6 +40,7 @@ app.whenReady().then(() => {
   mainWindow.on("unmaximize", () => {
     mainWindow.webContents.send("isRestored");
   });
+  */
 });
 
 app.on("window-all-closed", function () {
@@ -48,6 +49,7 @@ app.on("window-all-closed", function () {
 
 //////// ipcMain handlers ////////
 
+/*
 ipcMain.handle("minimize-app", (event) => {
   mainWindow.minimize();
 });
@@ -63,21 +65,43 @@ ipcMain.handle("restore-app", (event) => {
 ipcMain.handle("close-app", (event) => {
   mainWindow.close();
 });
+*/
 
 ipcMain.handle("get-source-names", (event) => {
   return Engine.getSourceNames();
 });
 
-ipcMain.handle("get-mangas", (event, sourceName) => {
-  return Engine.getMangas(sourceName);
+ipcMain.handle("get-mangas", async (event, sourceName) => {
+  try {
+    return await Engine.getMangas(sourceName);
+  } catch (e) {
+    console.log(e);
+  }
+  return [];
 });
 
-ipcMain.handle("get-chapters", (event, sourceName, manga) => {
-  return Engine.getChapters(sourceName, manga);
+ipcMain.handle("get-chapters", async (event, sourceName, manga) => {
+  try {
+    return await Engine.getChapters(sourceName, manga);
+  } catch (e) {
+    console.log(e);
+  }
+  return [];
 });
 
-ipcMain.handle("get-details", (event, sourceName, manga) => {
-  return Engine.getDetails(sourceName, manga);
+ipcMain.handle("get-details", async (event, sourceName, manga) => {
+  try {
+    return await Engine.getDetails(sourceName, manga);
+  } catch (e) {
+    console.log(e);
+  }
+  return {
+    authors: "",
+    genres: "",
+    releasedate: "",
+    status: "",
+    description: "",
+  };
 });
 
 ipcMain.handle("download-chapter", (event, sourceName, manga, chapter) => {

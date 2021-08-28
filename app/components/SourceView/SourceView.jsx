@@ -90,7 +90,7 @@ class SourceView extends Component {
           <div className="View-header">
             <div className="View-header-title">Welcome to Manga Puppet!</div>
             <div className="View-header-subtitle">
-              Pick a source to get started.
+              Pick a source to get started
             </div>
           </div>
 
