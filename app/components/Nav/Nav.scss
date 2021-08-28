@@ -1,0 +1,27 @@
+.Nav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  background-color: var(--dark);
+}
+
+.NavLink {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0px;
+  color: white;
+  font-weight: bolder;
+  transition: background-color 100ms ease-out;
+  will-change: background-color;
+  &:hover {
+    background-color: var(--lavender);
+  }
+}
+
+.NavLink-active {
+  background-color: var(--purple);
+  &:hover {
+    background-color: var(--purple);
+  }
+}
