@@ -189,7 +189,7 @@ class MangaView extends Component {
 
           <React.Fragment>
             <div className="View-title">
-              {"Browsing: " + this.props.sourceName}
+              {"Browsing " + this.props.sourceName}
             </div>
             <div className="View-list">
               {this.state.mangas.length === 0 ? (

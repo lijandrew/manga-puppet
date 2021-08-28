@@ -33,6 +33,7 @@
   margin: 0;
   padding: 0;
   user-select: none;
+  line-height: 1.5;
 }
 
 html,
@@ -43,7 +44,7 @@ body,
   height: 100%;
   font-family: var(--font-family);
   background-color: var(--darkish);
-  font-size: 18px;
+  // font-size: 16px;
 }
 
 img {

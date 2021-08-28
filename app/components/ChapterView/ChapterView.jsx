@@ -164,10 +164,10 @@ class ChapterView extends Component {
     let chapterDivs = this.state.chapters.map((chapter) => {
       return (
         <div className="ChapterView-list-entry" key={`chapter-${i++}`}>
-          <div className="ChapterView-list-entry-title">{chapter.title}</div>
           <div className="ChapterView-list-entry-status">
             {this.getChapterStatus(chapter)}
           </div>
+          <div className="ChapterView-list-entry-title">{chapter.title}</div>
         </div>
       );
     });
