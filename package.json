@@ -4,7 +4,7 @@
   "description": "Manga downloader",
   "main": "electron/electron.js",
   "scripts": {
-    "start": "concurrently --kill-others -c cyan,yellow -n react,electron npm:serve npm:electron",
+    "dev": "concurrently --kill-others -c cyan,yellow -n react,electron npm:serve npm:electron",
     "electron": "electron .",
     "serve": "webpack serve",
     "engine-test": "node ./engineTest.js"
