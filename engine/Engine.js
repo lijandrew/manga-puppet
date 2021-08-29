@@ -1,10 +1,11 @@
 // Engine.js
 // Used by electron.js to access and use the backend engine
 
-const MangaLife = require("./sources/MangaLife.js");
-const DownloadManager = require("./DownloadManager.js");
+const Settings = require("./Settings.js");
 const Storage = require("./Storage.js");
+const DownloadManager = require("./DownloadManager.js");
 const DownloadJob = require("./DownloadJob.js");
+const MangaLife = require("./sources/MangaLife.js");
 
 const Engine = {
   getSources() {
@@ -47,6 +48,18 @@ const Engine = {
     return this.getSourceByName(sourceName).getChapters(manga);
   },
 
+  // Returns Promise
+  getPages(sourceName, chapter) {
+    if (!chapter) {
+      return;
+    }
+    const source = this.getSourceByName(sourceName);
+    if (!source) {
+      return;
+    }
+    return this.getSourceByName(sourceName).getPages(chapter);
+  },
+
   // Enqueues a downloadJob with the given callback
   // The callback is to be used to alert on completion
   downloadChapter(sourceName, manga, chapter, callback) {
@@ -81,6 +94,14 @@ const Engine = {
       return;
     }
     return Storage.getDownloadedChapterFilenames(source, manga);
+  },
+
+  getReaderSettings() {
+    return Settings.pageViewSettings;
+  },
+
+  setReaderSettings(settings) {
+    return Object.assign(Settings.pageViewSettings, settings);
   },
 };
 

@@ -18,6 +18,7 @@ function createWindow() {
       contextIsolation: false,
     },
   });
+  // mainWindow.removeMenu();
   mainWindow.loadFile(path.join(__dirname, "..", "public", "index.html"));
   mainWindow.setBackgroundColor("#161616");
   mainWindow.on("closed", () => {
@@ -67,11 +68,11 @@ ipcMain.handle("close-app", (event) => {
 });
 */
 
-ipcMain.handle("get-source-names", (event) => {
+ipcMain.handle("get-source-names", (_event) => {
   return Engine.getSourceNames();
 });
 
-ipcMain.handle("get-mangas", async (event, sourceName) => {
+ipcMain.handle("get-mangas", async (_event, sourceName) => {
   try {
     return await Engine.getMangas(sourceName);
   } catch (e) {
@@ -80,7 +81,7 @@ ipcMain.handle("get-mangas", async (event, sourceName) => {
   return [];
 });
 
-ipcMain.handle("get-chapters", async (event, sourceName, manga) => {
+ipcMain.handle("get-chapters", async (_event, sourceName, manga) => {
   try {
     return await Engine.getChapters(sourceName, manga);
   } catch (e) {
@@ -89,7 +90,7 @@ ipcMain.handle("get-chapters", async (event, sourceName, manga) => {
   return [];
 });
 
-ipcMain.handle("get-details", async (event, sourceName, manga) => {
+ipcMain.handle("get-details", async (_event, sourceName, manga) => {
   try {
     return await Engine.getDetails(sourceName, manga);
   } catch (e) {
@@ -104,13 +105,26 @@ ipcMain.handle("get-details", async (event, sourceName, manga) => {
   };
 });
 
-ipcMain.handle("download-chapter", (event, sourceName, manga, chapter) => {
-  Engine.downloadChapter(sourceName, manga, chapter, () => {
-    // Send message upon finish so frontend knows to mark chapter as downloaded
-    mainWindow.webContents.send(
-      "downloaded-chapter-filenames",
-      Engine.getDownloadedChapterFilenames(sourceName, manga)
-    );
+ipcMain.handle("get-pages", async (_event, sourceName, chapter) => {
+  try {
+    return await Engine.getPages(sourceName, chapter);
+  } catch (e) {
+    console.log(e);
+  }
+  return [];
+});
+
+ipcMain.handle("download-chapter", (_event, sourceName, manga, chapter) => {
+  Engine.downloadChapter(sourceName, manga, chapter, (error) => {
+    if (!error) {
+      // Send message upon finish so frontend knows to mark chapter as downloaded
+      mainWindow.webContents.send(
+        "downloaded-chapter-filenames",
+        Engine.getDownloadedChapterFilenames(sourceName, manga)
+      );
+    } else {
+      mainWindow.webContents.send("error-chapter-filename", chapter.filename);
+    }
   });
 
   return Engine.getDownloadingChapterFilenames(sourceName, manga);
@@ -118,20 +132,28 @@ ipcMain.handle("download-chapter", (event, sourceName, manga, chapter) => {
 
 ipcMain.handle(
   "get-downloaded-chapter-filenames",
-  (event, sourceName, manga) => {
+  (_event, sourceName, manga) => {
     return Engine.getDownloadedChapterFilenames(sourceName, manga);
   }
 );
 
 ipcMain.handle(
   "get-downloading-chapter-filenames",
-  (event, sourceName, manga) => {
+  (_event, sourceName, manga) => {
     return Engine.getDownloadingChapterFilenames(sourceName, manga);
   }
 );
 
-ipcMain.handle("open-manga-folder", (event, sourceName, manga) => {
+ipcMain.handle("open-manga-folder", (_event, sourceName, manga) => {
   shell.openPath(
     path.normalize(path.join(Settings.downloadPath, sourceName, manga.filename))
   );
+});
+
+ipcMain.handle("get-reader-settings", (_event) => {
+  return Engine.getReaderSettings();
+});
+
+ipcMain.handle("set-reader-settings", (_event, settings) => {
+  return Engine.setReaderSettings(settings);
 });

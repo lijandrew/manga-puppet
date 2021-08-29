@@ -24,7 +24,7 @@
 .ChapterView-list-entry {
   display: flex;
   align-items: center;
-  padding: 0px 30px;
+  padding: 10px;
   color: white;
   &:nth-child(odd) {
     background-color: var(--dark);
@@ -32,13 +32,20 @@
 }
 
 .ChapterView-list-entry-title {
+  margin-left: 10px;
   white-space: nowrap;
   font-weight: bolder;
 }
 
 .ChapterView-list-entry-status {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   div {
-    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 3px;
     img {
       width: 20px;
       filter: grayscale(0) brightness(100%);
@@ -49,10 +56,25 @@
 }
 
 .ChapterView-list-entry-status-download,
-.ChapterView-list-entry-status-downloaded {
+.ChapterView-list-entry-status-downloaded,
+.ChapterView-list-entry-status-read {
   cursor: pointer;
   &:hover img {
     filter: grayscale(100%) brightness(500%);
+  }
+}
+.ChapterView-list-entry-status-error {
+  cursor: pointer;
+  img:nth-child(2) {
+    display: none;
+  }
+  &:hover {
+    img:nth-child(1) {
+      display: none;
+    }
+    img:nth-child(2) {
+      display: block;
+    }
   }
 }
 

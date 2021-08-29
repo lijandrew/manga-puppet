@@ -1,0 +1,56 @@
+.Reader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.Reader-header {
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  .Reader-header-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+    img {
+      transition: filter 100ms ease-out;
+      will-change: filter;
+    }
+    &:hover img {
+      filter: grayscale(100%) brightness(500%);
+    }
+  }
+}
+
+.Reader-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  // Temporary
+  width: 60%;
+}
+
+.Reader-list-entry {
+  margin: 10px 0;
+  img {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.Reader-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}

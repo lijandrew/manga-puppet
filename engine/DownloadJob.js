@@ -1,4 +1,16 @@
 const axios = require("axios");
+const axiosRetry = require("axios-retry");
+axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
+/*
+axiosRetry(axios, {
+  retries: 3,
+  retryDelay: () => {
+    console.log("-------------RETRYING-------------");
+    return 1000;
+  },
+  retryCondition: (error) => true, // Retry no matter what. For testing.
+});
+*/
 
 const Storage = require("./Storage.js");
 const Image = require("./Image.js");
@@ -15,6 +27,7 @@ function DownloadJob(source, manga, chapter, callback) {
     console.log("DownloadJob:start");
     // Get chapter pages if necessary
     // (user may have clicked download without opening the chapter)
+    let imagesError = null;
     let pages = await this.source.getPages(this.chapter);
     let images = await Promise.all(
       pages.map((page) => {
@@ -25,25 +38,28 @@ function DownloadJob(source, manga, chapter, callback) {
           return new Image(page.filename, response.data);
         });
       })
-    );
+    ).catch((error) => {
+      console.log("THERE WAS A DOWNLOAD ERROR");
+      imagesError = error;
+    });
 
-    await Storage.saveImagesToCbz(
-      this.source,
-      this.manga,
-      this.chapter,
-      images
-    );
-
-    /*
-    await Storage.saveImagesToFolder(
-      this.source,
-      this.manga,
-      this.chapter,
-      images
-    );
-    */
-
-    this.callback();
+    if (!imagesError) {
+      await Storage.saveImagesToCbz(
+        this.source,
+        this.manga,
+        this.chapter,
+        images
+      );
+      /*
+      await Storage.saveImagesToFolder(
+        this.source,
+        this.manga,
+        this.chapter,
+        images
+      );
+      */
+    }
+    this.callback(imagesError);
   };
 }
 

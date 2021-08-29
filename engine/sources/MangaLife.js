@@ -1,4 +1,5 @@
 const axios = require("axios");
+const axiosRetry = require("axios-retry");
 const { JSDOM } = require("jsdom");
 const puppeteer = require("puppeteer");
 
@@ -7,6 +8,17 @@ const Manga = require("../Manga.js");
 const Chapter = require("../Chapter.js");
 const Page = require("../Page.js");
 const sanitize = require("sanitize-filename");
+
+axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
+/*
+axiosRetry(axios, {
+  retries: 3,
+  retryDelay: () => {
+    console.log("-------------RETRYING-------------");
+    return 200;
+  },
+});
+*/
 
 const MangaLife = new Source("MangaLife");
 
