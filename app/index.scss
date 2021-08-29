@@ -62,7 +62,7 @@ a {
 }
 
 ::-webkit-scrollbar {
-  width: 20px;
+  width: 10px;
 }
 
 ::-webkit-scrollbar-track {
@@ -71,9 +71,6 @@ a {
 
 ::-webkit-scrollbar-thumb {
   background-color: var(--purple);
-  border-radius: 20px;
-  border: 6px solid transparent;
-  background-clip: content-box;
 }
 
 ::-webkit-scrollbar-thumb:hover {

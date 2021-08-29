@@ -1,26 +1,52 @@
-import React, { useState, useEffect } from "react";
+import React, { Component } from "react";
 const { ipcRenderer } = window.require("electron");
-// const Settings = window.require("../../../engine/Settings.js");
 const Settings = window.require("../engine/Settings.js");
 
 import "./Reader.scss";
 
-function Reader(props) {
-  const [pages, setPages] = useState([]);
-  const [readerSettings, setReaderSettings] = useState({});
-  const forceUpdate = useForceUpdate();
+class Reader extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      pages: [],
+    };
+    this.updatePages = this.updatePages.bind(this);
+    this.getPageDivs = this.getPageDivs.bind(this);
+    this.update = this.update.bind(this);
+  }
 
-  useEffect(() => {
+  componentDidMount() {
+    this.updatePages();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.props.chapter !== prevProps.chapter) {
+      this.setState(
+        {
+          pages: [],
+        },
+        () => {
+          this.updatePages();
+        }
+      );
+    }
+  }
+
+  updatePages() {
     ipcRenderer
-      .invoke("get-pages", props.sourceName, props.chapter)
+      .invoke("get-pages", this.props.sourceName, this.props.chapter)
       .then((pages) => {
-        setPages(pages);
+        this.setState({ pages: pages });
       });
-  }, []);
+  }
 
-  function getPageDivs() {
+  update() {
+    this.forceUpdate();
+  }
+
+  getPageDivs() {
     let i = 1;
-    return pages.map((page) => (
+    return this.state.pages.map((page) => (
       <div
         key={`page-${i++}`}
         className="Reader-list-entry"
@@ -31,40 +57,47 @@ function Reader(props) {
     ));
   }
 
-  return (
-    <div className="Reader">
-      <div
-        className="View-back"
-        onClick={() => {
-          props.setChapter(null);
-        }}
-      >
-        <div className="View-back-button">
-          <img src={require("../../assets/icons/corner-up-left.svg")} />
-        </div>
-      </div>
-
-      <div className="Reader-header">
-        <ZoomIn forceUpdate={forceUpdate} />
-        <ZoomOut forceUpdate={forceUpdate} />
-        <IncreaseMargin forceUpdate={forceUpdate} />
-        <DecreaseMargin forceUpdate={forceUpdate} />
-      </div>
-
-      {pages.length > 0 ? (
+  render() {
+    return (
+      <div className="Reader">
         <div
-          className="Reader-list"
-          style={{ width: Settings.readerSettings.zoom + "%" }}
+          className="View-back"
+          onClick={() => {
+            this.props.setChapter(null);
+          }}
         >
-          {getPageDivs()}
+          <div className="View-back-button">
+            <img src={require("../../assets/icons/corner-up-left.svg")} />
+          </div>
         </div>
-      ) : (
-        <div className="Reader-loading">
-          <img src={require("../../assets/images/loading.gif")} />
+
+        <div className="Reader-header">
+          <IncreaseMargin update={this.update} />
+          <DecreaseMargin update={this.update} />
+          <PreviousChapter {...this.props} pages={this.state.pages} />
+          <div className="Reader-header-chapter">
+            {this.props.chapter.title}
+          </div>
+          <NextChapter {...this.props} pages={this.state.pages} />
+          <ZoomIn update={this.update} />
+          <ZoomOut update={this.update} />
         </div>
-      )}
-    </div>
-  );
+
+        {this.state.pages.length > 0 ? (
+          <div
+            className="Reader-list"
+            style={{ width: Settings.readerSettings.zoom + "%" }}
+          >
+            {this.getPageDivs()}
+          </div>
+        ) : (
+          <div className="Reader-loading">
+            <img src={require("../../assets/images/loading.gif")} />
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
 function ZoomIn(props) {
@@ -72,7 +105,7 @@ function ZoomIn(props) {
     <div
       onClick={() => {
         Settings.readerSettings.zoom += Settings.readerSettings.zoomConstant;
-        props.forceUpdate();
+        props.update();
       }}
       className="Reader-header-button"
     >
@@ -86,7 +119,7 @@ function ZoomOut(props) {
     <div
       onClick={() => {
         Settings.readerSettings.zoom -= Settings.readerSettings.zoomConstant;
-        props.forceUpdate();
+        props.update();
       }}
       className="Reader-header-button"
     >
@@ -101,7 +134,7 @@ function IncreaseMargin(props) {
       onClick={() => {
         Settings.readerSettings.margin +=
           Settings.readerSettings.marginConstant;
-        props.forceUpdate();
+        props.update();
       }}
       className="Reader-header-button"
     >
@@ -125,9 +158,47 @@ function DecreaseMargin(props) {
   );
 }
 
-function useForceUpdate() {
-  const [value, setValue] = useState(1);
-  return () => setValue((value) => -1 * value);
+function PreviousChapter(props) {
+  const chapters = [...props.chapters].reverse();
+  return (
+    <div
+      onClick={() => {
+        props.setChapter(
+          chapters[Math.max(chapters.indexOf(props.chapter) - 1, 0)]
+        );
+      }}
+      className={`Reader-header-button${
+        props.pages.length === 0 || chapters.indexOf(props.chapter) === 0
+          ? " disabled"
+          : ""
+      }`}
+    >
+      <img src={require("../../assets/icons/chevron-left.svg")} />
+    </div>
+  );
+}
+
+function NextChapter(props) {
+  const chapters = [...props.chapters].reverse();
+  return (
+    <div
+      onClick={() => {
+        props.setChapter(
+          chapters[
+            Math.min(chapters.indexOf(props.chapter) + 1, chapters.length - 1)
+          ]
+        );
+      }}
+      className={`Reader-header-button${
+        props.pages.length === 0 ||
+        chapters.indexOf(props.chapter) === chapters.length - 1
+          ? " disabled"
+          : ""
+      }`}
+    >
+      <img src={require("../../assets/icons/chevron-right.svg")} />
+    </div>
+  );
 }
 
 export default Reader;

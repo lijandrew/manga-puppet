@@ -5,7 +5,16 @@
   height: 100%;
 }
 
+@keyframes fade {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
 .Reader-header {
+  z-index: 99;
   position: fixed;
   bottom: 60px;
   left: 50%;
@@ -14,6 +23,25 @@
   justify-content: center;
   align-items: center;
   background-color: black;
+  opacity: 0;
+
+  // Show for 3 seconds initially before fading
+  animation: fade 100ms ease-out 3000ms backwards;
+
+  // Longer transition when hover off
+  transition: opacity 100ms ease-out 1000ms;
+  will-change: opacity;
+  &:hover {
+    opacity: 1;
+    transition: opacity 100ms ease-out;
+  }
+  &::before {
+    // Padding to make hover target larger (easier to hover when invisible)
+    content: "";
+    position: absolute;
+    width: calc(100% + 100px);
+    height: calc(100% + 100px);
+  }
   .Reader-header-button {
     display: flex;
     justify-content: center;
@@ -27,6 +55,10 @@
     &:hover img {
       filter: grayscale(100%) brightness(500%);
     }
+  }
+  .Reader-header-chapter {
+    color: white;
+    font-weight: bolder;
   }
 }
 
