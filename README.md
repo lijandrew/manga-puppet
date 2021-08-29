@@ -13,26 +13,32 @@
 
 ## **Table of Contents**
 
-[Screenshots](#screenshots)  
 [Download](#download)  
+[Screenshots](#screenshots)  
 [Why?](#why)  
+[Sources](#sources)  
 [Development](#development)  
 [Built With](#built-with)  
 [Contributing](#contributing)  
 [License](#license)
 
+## **Download**
+
+&rarr; Coming very soon!
+
 ## **Screenshots**
 
 ![Manga view screenshot](screenshots/mangas.png)
 ![Chapters view screenshot](screenshots/chapters.png)
+![Reader screenshot](screenshots/reader.png)
 
 ## **Why?**
 
-Manga Puppet aims to be a sleek, accessible, and user-friendly manga reading and downloading option. At the cost of some extra bandwidth usage and a few extra clicks, Manga Puppet gives the user a richer overall experience (cover images, manga information, etc.) and a cleaner, less-cluttered interface.
+Manga Puppet aims to be a sleek, accessible, and user-friendly manga reading and downloading option by providing a richer visual experience (cover images, manga information, etc.) as well as a cleaner and easier-to-navigate interface.
 
-## **Download**
+## **Sources**
 
-&rarr; Coming very soon!
+As of now, only **MangaLife** has been implemented. More coming though!
 
 ## **Development**
 
@@ -55,7 +61,7 @@ npm i
 ```
 
 Start development app  
-_Note: live reload only on React frontend. Electron requires manual relaunching._
+_Note: live reload is only for the React frontend. Electron requires manual relaunching._
 
 ```bash
 npm run dev
