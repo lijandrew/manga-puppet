@@ -146,14 +146,13 @@
   justify-content: center;
   align-items: center;
   img {
-    filter: grayscale(100%) brightness(500%);
     transition: filter 100ms ease-out;
     will-change: filter;
   }
   &:hover {
     background-color: white;
     img {
-      filter: none;
+      filter: brightness(30%);
     }
   }
 }

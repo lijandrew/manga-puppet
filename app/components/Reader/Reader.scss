@@ -22,8 +22,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: black;
+  background-color: var(--purple);
+  padding: 10px;
   opacity: 0;
+  box-sizing: 10px 10px 5px rgba(0, 0, 0, 0.5);
 
   // Show for 3 seconds initially before fading
   animation: fade 100ms ease-out 3000ms backwards;
@@ -49,11 +51,14 @@
     cursor: pointer;
     padding: 10px;
     img {
-      transition: filter 100ms ease-out;
-      will-change: filter;
+      transition: opacity 100ms ease-out;
+      will-change: opacity;
     }
     &:hover img {
-      filter: grayscale(100%) brightness(500%);
+      opacity: 0.7;
+    }
+    &.disabled {
+      opacity: 0.4;
     }
   }
   .Reader-header-chapter {
