@@ -2,7 +2,7 @@
   <img width="128px" src="electron/logo.png">
   <p></p>
   <h1><b>Manga Puppet</b></h1>
-  <h3>Sleek manga reader & downloader for Windows, MacOS, and Linux</h3>
+  <h3>Sleek manga downloader & reader for Windows, MacOS, and Linux</h3>
   <p></p>
   <a>
     <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome!" />
@@ -34,7 +34,7 @@
 
 ## **Why?**
 
-Manga Puppet aims to be a sleek, accessible, and user-friendly manga reading and downloading option by providing a richer visual experience (cover images, manga information, etc.) as well as a cleaner and easier-to-navigate interface.
+Manga Puppet aims to be a sleek, accessible, and user-friendly manga downloading and reading option by providing a richer visual experience (cover images, manga information, etc.) as well as a cleaner and easier-to-navigate interface.
 
 ## **Sources**
 
