@@ -1,4 +1,5 @@
 const sanitize = require("sanitize-filename");
+const Storage = require("./Storage.js");
 
 /**
  * Source superclass. Represents manga sites.
@@ -38,8 +39,20 @@ function Source(name) {
     if (this.mangas.length > 0) {
       return this.mangas;
     }
-    // Cache
-    this.mangas = await this.fetchMangas();
+
+    // Check local storage
+    const mangaFilenames = Storage.getDownloadedMangaFilenames(this);
+    if (mangaFilenames.length > 0) {
+      console.log("Local mangas found");
+      // TODO: ???
+    }
+
+    // Attempt to fetch from online
+    try {
+      this.mangas = await this.fetchMangas();
+    } catch (e) {
+      console.log(e);
+    }
     return this.mangas;
   };
 
@@ -48,16 +61,42 @@ function Source(name) {
     if (manga.chapters.length > 0) {
       return manga.chapters;
     }
-    // Cache
-    manga.chapters = await this.fetchChapters(manga);
+
+    // Check local storage
+    const { chapterFilenames } = Storage.getDownloadedChapterFilenames(
+      this,
+      manga
+    );
+    if (chapterFilenames.length > 0) {
+      console.log("Local chapters found");
+      // TODO: ???
+    }
+
+    // Attempt to fetch from online
+    try {
+      manga.chapters = await this.fetchChapters(manga);
+    } catch (e) {
+      console.log(e);
+    }
     return manga.chapters;
   };
 
-  this.getPages = async (chapter) => {
+  this.getPages = async (manga, chapter) => {
     // Check for cache
     if (chapter.pages.length > 0) {
       return chapter.pages;
     }
+
+    // Check local storage
+    const { chapterFilenames } = Storage.getDownloadedChapterFilenames(
+      this,
+      manga
+    );
+    if (chapterFilenames.length > 0) {
+      console.log("Local pages found");
+      // TODO: ???
+    }
+
     // Cache
     chapter.pages = await this.fetchPages(chapter);
     return chapter.pages;

@@ -16,6 +16,15 @@ const Storage = {
     }
   },
 
+  getDownloadedMangaFilenames(source) {
+    console.log("Storage:getDownloadedMangaFilenames");
+    const sourcePath = path.join(Settings.downloadPath, source.filename);
+    if (!fs.existsSync(sourcePath)) {
+      return [];
+    }
+    return fs.readdirSync(sourcePath);
+  },
+
   getDownloadedChapterFilenames(source, manga) {
     console.log("Storage:getDownloadedChapterFilenames");
     const mangaPath = path.join(

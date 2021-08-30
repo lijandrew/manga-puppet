@@ -15,13 +15,16 @@ const Favorites = {
   getFavorites() {
     return favorites;
   },
+
   syncFavorites() {
     fs.writeFileSync(favoritesPath, JSON.stringify(favorites));
   },
+
   deleteFavorite(uuid) {
     delete favorites[uuid];
     this.syncFavorites();
   },
+
   addFavorite(favorite) {
     favorites[uuidv4()] = favorite;
     this.syncFavorites();

@@ -28,7 +28,7 @@ function DownloadJob(source, manga, chapter, callback) {
     // Get chapter pages if necessary
     // (user may have clicked download without opening the chapter)
     let imagesError = null;
-    let pages = await this.source.getPages(this.chapter);
+    let pages = await this.source.getPages(this.manga, this.chapter);
     let images = await Promise.all(
       pages.map((page) => {
         return axios({
