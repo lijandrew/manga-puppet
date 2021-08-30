@@ -28,14 +28,14 @@
   box-sizing: 10px 10px 5px rgba(0, 0, 0, 0.5);
 
   // Show for 3 seconds initially before fading
-  animation: fade 100ms ease-out 3000ms backwards;
+  animation: fade 500ms linear 3000ms backwards;
 
   // Longer transition when hover off
-  transition: opacity 100ms ease-out 1000ms;
+  transition: opacity 500ms linear 1000ms;
   will-change: opacity;
   &:hover {
     opacity: 1;
-    transition: opacity 100ms ease-out;
+    transition: opacity 100ms linear;
   }
   &::before {
     // Padding to make hover target larger (easier to hover when invisible)
@@ -71,13 +71,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  // Temporary
-  width: 60%;
 }
 
 .Reader-list-entry {
-  margin: 10px 0;
+  width: 100%;
   img {
     width: 100%;
     max-width: 100%;
@@ -90,4 +87,8 @@
   align-items: center;
   width: 100%;
   height: 100%;
+  img {
+    width: 300px;
+    max-width: 100%;
+  }
 }

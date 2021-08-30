@@ -1,0 +1,22 @@
+{
+  "favorites": [
+    {
+      "sourceName": "MangaLife",
+      "manga": {
+        "id": "",
+        "url": "",
+        "title": "",
+        "filename": "",
+        "coverImageUrl": "",
+        "chapters": [],
+        "details": {
+          "authors": "",
+          "genres": "",
+          "releasedate": "",
+          "status": "",
+          "description": ""
+        }
+      }
+    }
+  ]
+}

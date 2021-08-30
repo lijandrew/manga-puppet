@@ -1,7 +1,8 @@
 import React, { Component } from "react";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 const { ipcRenderer } = window.require("electron");
-const Settings = window.require("../engine/Settings.js");
 
+const Settings = window.require("../engine/Settings.js");
 import "./Reader.scss";
 
 class Reader extends Component {
@@ -50,9 +51,9 @@ class Reader extends Component {
       <div
         key={`page-${i++}`}
         className="Reader-list-entry"
-        style={{ margin: Settings.readerSettings.margin + "px" }}
+        style={{ margin: Settings.readerSettings.margin + "px 0" }}
       >
-        <img src={page.url} />
+        <LazyLoadImage src={page.url} />
       </div>
     ));
   }
@@ -149,7 +150,7 @@ function DecreaseMargin(props) {
       onClick={() => {
         Settings.readerSettings.margin -=
           Settings.readerSettings.marginConstant;
-        props.forceUpdate();
+        props.update();
       }}
       className="Reader-header-button"
     >

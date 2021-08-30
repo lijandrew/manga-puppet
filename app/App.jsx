@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { HashRouter, Switch, Route } from "react-router-dom";
 
-import Home from "./components/Home/Home.jsx";
+// import Home from "./components/Home/Home.jsx";
 import SourceView from "./components/SourceView/SourceView.jsx";
 import Settings from "./components/Settings/Settings.jsx";
 import "./App.scss";

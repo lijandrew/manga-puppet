@@ -181,6 +181,7 @@ class ChapterView extends Component {
         onClick={() => {
           this.handleDownloadClick(chapter);
         }}
+        title={chapter.title}
       />
     );
   }
@@ -316,7 +317,7 @@ function StatusDownload(props) {
     <div
       onClick={props.onClick}
       className="ChapterView-list-entry-status-download"
-      title={`Download chapter`}
+      title={`Download ${props.title}`}
     >
       <img src={require("../../assets/icons/download.svg")} />
     </div>
