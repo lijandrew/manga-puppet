@@ -25,13 +25,17 @@ const DownloadManager = {
   },
 
   getDownloadingChapterFilenames(source, manga) {
-    let result = this.queue
+    const chapterFilenames = this.queue
       .filter(
         (downloadJob) =>
-          source.name === downloadJob.source.name && manga.title === downloadJob.manga.title
+          source.name === downloadJob.source.name &&
+          manga.title === downloadJob.manga.title
       )
       .map((downloadJob) => downloadJob.chapter.filename);
-    return result;
+    return {
+      mangaFilename: manga.filename,
+      chapterFilenames: chapterFilenames,
+    };
   },
 };
 

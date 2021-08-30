@@ -50,8 +50,11 @@ class ChapterView extends Component {
     ]).then((data) => {
       const details = data[0];
       const chapters = data[1];
-      const downloadingChapterFilenames = data[2];
-      const downloadedChapterFilenames = data[3];
+      const downloadingChapterFilenames = data[2].chapterFilenames;
+      console.log("---------------------");
+      console.log(downloadingChapterFilenames);
+      console.log("---------------------");
+      const downloadedChapterFilenames = data[3].chapterFilenames;
       this.setState({
         details: details,
         chapters: chapters,
@@ -60,12 +63,18 @@ class ChapterView extends Component {
       });
     });
 
-    ipcRenderer.on("downloaded-chapter-filenames", (event, filenames) => {
-      // Update downloaded list upon download completion message
-      this.setState({
-        downloadedChapterFilenames: filenames,
-      });
-    });
+    ipcRenderer.on(
+      "downloaded-chapter-filenames",
+      (event, { mangaFilename, chapterFilenames }) => {
+        // Update downloaded list upon download completion message.
+        // Check that manga filename matches first.
+        if (this.props.manga.filename === mangaFilename) {
+          this.setState({
+            downloadedChapterFilenames: chapterFilenames,
+          });
+        }
+      }
+    );
 
     ipcRenderer.on("error-chapter-filename", (event, filename) => {
       // Update error list upon error message
@@ -140,10 +149,12 @@ class ChapterView extends Component {
       },
       () => {
         this.getDownloadChapterPromise(chapter).then(
-          (downloadingChapterFilenames) => {
-            this.setState({
-              downloadingChapterFilenames: downloadingChapterFilenames,
-            });
+          ({ mangaFilename, chapterFilenames }) => {
+            if (this.props.manga.filename === mangaFilename) {
+              this.setState({
+                downloadingChapterFilenames: chapterFilenames,
+              });
+            }
           }
         );
       }
@@ -159,6 +170,7 @@ class ChapterView extends Component {
   }
 
   getChapterStatus(chapter) {
+    console.log(this.state);
     if (this.state.errorChapterFilenames.includes(chapter.filename)) {
       return (
         <StatusError

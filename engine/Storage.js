@@ -25,7 +25,10 @@ const Storage = {
     );
     if (!fs.existsSync(mangaPath)) {
       // If manga path doesn't exist, there must not be chapters
-      return [];
+      return {
+        mangaFilename: manga.filename,
+        chapterFilenames: [],
+      };
     }
     // Unique filenames after removing .cbz extension
     const filenames = [
@@ -35,7 +38,10 @@ const Storage = {
           .map((filename) => filename.replace(/\.cbz$/i, ""))
       ),
     ];
-    return filenames;
+    return {
+      mangaFilename: manga.filename,
+      chapterFilenames: filenames,
+    };
   },
 
   saveImagesToFolder(source, manga, chapter, images) {
