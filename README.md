@@ -24,7 +24,8 @@
 
 ## **Download**
 
-&rarr; [Get it here](https://github.com/lijandrew/manga-puppet/releases)
+&rarr; [Get it here](https://github.com/lijandrew/manga-puppet/releases)  
+OSX and Linux releases coming soon.
 
 ## **Screenshots**
 
