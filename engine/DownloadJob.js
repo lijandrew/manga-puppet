@@ -1,16 +1,6 @@
 const axios = require("axios");
 const axiosRetry = require("axios-retry");
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
-/*
-axiosRetry(axios, {
-  retries: 3,
-  retryDelay: () => {
-    console.log("-------------RETRYING-------------");
-    return 1000;
-  },
-  retryCondition: (error) => true, // Retry no matter what. For testing.
-});
-*/
 
 const Storage = require("./Storage.js");
 const Image = require("./Image.js");

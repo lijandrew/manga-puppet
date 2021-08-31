@@ -11,8 +11,6 @@ function Manga(id, url, title) {
   this.filename = sanitize(title);
   this.coverImageUrl = "";
   this.chapters = [];
-
-  // Anything not absolutely needed for download functionality
   this.details = {
     authors: "",
     genres: "",

@@ -1,6 +1,6 @@
 const Engine = require("../engine/Engine.js");
 const Settings = require("../engine/Settings.js");
-const { app, BrowserWindow, ipcMain, shell } = require("electron");
+const { app, BrowserWindow, Menu, ipcMain, shell } = require("electron");
 const path = require("path");
 
 let mainWindow;
@@ -18,7 +18,6 @@ function createWindow() {
       contextIsolation: false,
     },
   });
-  // mainWindow.removeMenu();
   mainWindow.loadFile(path.join(__dirname, "..", "public", "index.html"));
   mainWindow.setBackgroundColor("#161616");
   mainWindow.on("closed", () => {
@@ -31,6 +30,8 @@ app.whenReady().then(() => {
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
+  const mainMenu = Menu.buildFromTemplate(menuTemplate);
+  Menu.setApplicationMenu(mainMenu);
 
   /*
   // Inform frontend of whether window is maximized or not
@@ -43,6 +44,46 @@ app.whenReady().then(() => {
   });
   */
 });
+
+const menuTemplate = [
+  {
+    label: "File",
+    submenu: [
+      {
+        label: "Refresh",
+        click(item, focusedWindow) {
+          focusedWindow.reload();
+        },
+      },
+      {
+        label: "Restart",
+        click() {
+          app.relaunch();
+          app.quit();
+        },
+      },
+      {
+        label: "Quit",
+        click() {
+          app.quit();
+        },
+      },
+    ],
+  },
+  {
+    label: "View",
+    submenu: [
+      {
+        label: "Toggle Developer Tools",
+        accelerator:
+          process.platform === "darwin" ? "Command+Alt+I" : "Ctrl+Shift+I",
+        click(item, focusedWindow) {
+          focusedWindow.toggleDevTools();
+        },
+      },
+    ],
+  },
+];
 
 app.on("window-all-closed", function () {
   if (process.platform !== "darwin") app.quit();
@@ -105,9 +146,9 @@ ipcMain.handle("get-details", async (_event, sourceName, manga) => {
   };
 });
 
-ipcMain.handle("get-pages", async (_event, sourceName, chapter) => {
+ipcMain.handle("get-pages", async (_event, sourceName, manga, chapter) => {
   try {
-    return await Engine.getPages(sourceName, chapter);
+    return await Engine.getPages(sourceName, manga, chapter);
   } catch (e) {
     console.log(e);
   }

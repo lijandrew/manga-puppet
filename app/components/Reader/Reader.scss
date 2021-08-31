@@ -37,13 +37,6 @@
     opacity: 1;
     transition: opacity 100ms linear;
   }
-  &::before {
-    // Padding to make hover target larger (easier to hover when invisible)
-    content: "";
-    position: absolute;
-    width: calc(100% + 100px);
-    height: calc(100% + 100px);
-  }
   .Reader-header-button {
     display: flex;
     justify-content: center;

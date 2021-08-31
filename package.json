@@ -1,13 +1,15 @@
 {
   "name": "manga-puppet",
-  "version": "1.0.0",
+  "version": "0.1",
   "description": "Manga downloader",
   "main": "electron/electron.js",
   "scripts": {
     "dev": "concurrently --kill-others -c cyan,yellow -n react,electron npm:serve npm:electron",
     "electron": "electron .",
-    "serve": "webpack serve",
-    "engine-test": "node ./engineTest.js"
+    "serve": "webpack serve --mode=development",
+    "build": "webpack --mode=production",
+    "engine-test": "node ./engineTest.js",
+    "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=electron/logo.ico --prune=true --out=release-builds"
   },
   "author": "Andrew Li",
   "license": "MIT",
@@ -22,8 +24,7 @@
     "react-lazy-load-image-component": "^1.5.1",
     "react-paginate": "^7.1.3",
     "react-router-dom": "^5.2.0",
-    "sanitize-filename": "^1.6.3",
-    "uuid": "^3.4.0"
+    "sanitize-filename": "^1.6.3"
   },
   "devDependencies": {
     "@babel/core": "^7.15.0",

@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import ReactPaginate from "react-paginate";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 const { ipcRenderer } = window.require("electron");
 

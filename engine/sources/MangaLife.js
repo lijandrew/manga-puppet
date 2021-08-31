@@ -10,15 +10,6 @@ const Page = require("../Page.js");
 const sanitize = require("sanitize-filename");
 
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
-/*
-axiosRetry(axios, {
-  retries: 3,
-  retryDelay: () => {
-    console.log("-------------RETRYING-------------");
-    return 200;
-  },
-});
-*/
 
 const MangaLife = new Source("MangaLife");
 

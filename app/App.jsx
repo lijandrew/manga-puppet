@@ -1,19 +1,15 @@
 import React, { Component } from "react";
-import { HashRouter, Switch, Route } from "react-router-dom";
+// import { HashRouter, Switch, Route } from "react-router-dom";
 
+// import Nav from "./components/Nav/Nav.jsx";
 // import Home from "./components/Home/Home.jsx";
 import SourceView from "./components/SourceView/SourceView.jsx";
-import Settings from "./components/Settings/Settings.jsx";
+// import Settings from "./components/Settings/Settings.jsx";
 import "./App.scss";
-import Nav from "./components/Nav/Nav.jsx";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      sourceName: null,
-      manga: null,
-    };
   }
 
   render() {

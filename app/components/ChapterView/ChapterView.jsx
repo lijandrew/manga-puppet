@@ -51,9 +51,6 @@ class ChapterView extends Component {
       const details = data[0];
       const chapters = data[1];
       const downloadingChapterFilenames = data[2].chapterFilenames;
-      console.log("---------------------");
-      console.log(downloadingChapterFilenames);
-      console.log("---------------------");
       const downloadedChapterFilenames = data[3].chapterFilenames;
       this.setState({
         details: details,
@@ -170,7 +167,6 @@ class ChapterView extends Component {
   }
 
   getChapterStatus(chapter) {
-    console.log(this.state);
     if (this.state.errorChapterFilenames.includes(chapter.filename)) {
       return (
         <StatusError
@@ -210,7 +206,7 @@ class ChapterView extends Component {
                 this.setChapter(chapter);
               }}
               className="ChapterView-list-entry-status-read"
-              title={`Read ${chapter.title}`}
+              title={`Read ${chapter.title} (requires internet)`}
             >
               <img src={require("../../assets/icons/book-open.svg")} />
             </div>
@@ -276,6 +272,7 @@ class ChapterView extends Component {
         {this.state.chapter ? (
           <Reader
             sourceName={this.props.sourceName}
+            manga={this.props.manga}
             chapter={this.state.chapter}
             chapters={this.state.chapters}
             setChapter={this.setChapter}

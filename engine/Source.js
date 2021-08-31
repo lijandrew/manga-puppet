@@ -5,7 +5,7 @@ const Storage = require("./Storage.js");
  * Source superclass. Represents manga sites.
  */
 function Source(name) {
-  // hotfix: name and filename are the same for asset naming consistency
+  // Name and filename are the same for asset naming consistency
   // without having to pass filename into electron frontend
   this.name = sanitize(name);
   this.filename = sanitize(name);
@@ -40,14 +40,16 @@ function Source(name) {
       return this.mangas;
     }
 
+    /*
     // Check local storage
     const mangaFilenames = Storage.getDownloadedMangaFilenames(this);
     if (mangaFilenames.length > 0) {
       console.log("Local mangas found");
       // TODO: ???
     }
+    */
 
-    // Attempt to fetch from online
+    // Attempt to fetch and cache pages from online
     try {
       this.mangas = await this.fetchMangas();
     } catch (e) {
@@ -62,6 +64,7 @@ function Source(name) {
       return manga.chapters;
     }
 
+    /*
     // Check local storage
     const { chapterFilenames } = Storage.getDownloadedChapterFilenames(
       this,
@@ -71,8 +74,9 @@ function Source(name) {
       console.log("Local chapters found");
       // TODO: ???
     }
+    */
 
-    // Attempt to fetch from online
+    // Attempt to fetch and cache pages from online
     try {
       manga.chapters = await this.fetchChapters(manga);
     } catch (e) {
@@ -87,6 +91,7 @@ function Source(name) {
       return chapter.pages;
     }
 
+    /*
     // Check local storage
     const { chapterFilenames } = Storage.getDownloadedChapterFilenames(
       this,
@@ -96,9 +101,14 @@ function Source(name) {
       console.log("Local pages found");
       // TODO: ???
     }
+    */
 
-    // Cache
-    chapter.pages = await this.fetchPages(chapter);
+    // Attempt to fetch and cache pages from online
+    try {
+      chapter.pages = await this.fetchPages(chapter);
+    } catch (e) {
+      console.log(e);
+    }
     return chapter.pages;
   };
 }

@@ -35,7 +35,12 @@ class Reader extends Component {
 
   updatePages() {
     ipcRenderer
-      .invoke("get-pages", this.props.sourceName, this.props.chapter)
+      .invoke(
+        "get-pages",
+        this.props.sourceName,
+        this.props.manga,
+        this.props.chapter
+      )
       .then((pages) => {
         this.setState({ pages: pages });
       });

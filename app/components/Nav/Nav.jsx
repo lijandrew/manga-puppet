@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 
+
 import "./Nav.scss";
 
 class Nav extends Component {
   render() {
     return (
-      <div class="Nav">
+      <div className="Nav">
         <NavLink
           className="NavLink"
           activeClassName="NavLink-active"
@@ -22,13 +23,13 @@ class Nav extends Component {
         >
           Browse
         </NavLink>
-        <NavLink
+        {/* <NavLink
           className="NavLink"
           activeClassName="NavLink-active"
           to="/settings"
         >
           Settings
-        </NavLink>
+        </NavLink> */}
       </div>
     );
   }
