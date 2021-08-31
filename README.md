@@ -24,7 +24,7 @@
 
 ## **Download**
 
-[Get it here](https://github.com/lijandrew/manga-puppet/releases)
+&rarr; [Get it here](https://github.com/lijandrew/manga-puppet/releases)
 
 ## **Screenshots**
 
