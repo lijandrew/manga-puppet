@@ -1,8 +1,10 @@
+const path = require("path");
 const axios = require("axios");
 const axiosRetry = require("axios-retry");
 const { JSDOM } = require("jsdom");
 const puppeteer = require("puppeteer");
 
+const Settings = require("../Settings.js");
 const Source = require("../Source.js");
 const Manga = require("../Manga.js");
 const Chapter = require("../Chapter.js");
@@ -11,10 +13,16 @@ const sanitize = require("sanitize-filename");
 
 axiosRetry(axios, { retries: 3, retryDelay: axiosRetry.exponentialDelay });
 
+const puppeteerOptions = {
+  executablePath: path.normalize(
+    path.join(__dirname, "..", "..", "chromium", "chrome.exe")
+  ),
+};
+
 const MangaLife = new Source("MangaLife");
 
 MangaLife.fetchMangas = async () => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch(puppeteerOptions);
   const [page] = await browser.pages();
   await page.goto("https://manga4life.com/directory", {
     waitUntil: "networkidle0",
@@ -40,7 +48,7 @@ MangaLife.fetchMangas = async () => {
 };
 
 MangaLife.fetchDetails = async (manga) => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch(puppeteerOptions);
   const [page] = await browser.pages();
   await page.goto(`https://manga4life.com/manga/${manga.id}`, {
     waitUntil: "networkidle0",
@@ -121,7 +129,7 @@ MangaLife.fetchChapters = async (manga) => {
 };
 
 MangaLife.fetchPages = async (chapter) => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch(puppeteerOptions);
   const [page] = await browser.pages();
   await page.goto(chapter.url, { waitUntil: "networkidle0" });
   const imageUrls = await page.evaluate(() =>

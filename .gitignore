@@ -1,5 +1,7 @@
 node_modules
 release-builds
 downloads
+chromium
+chromium_builds
 public
 .vscode

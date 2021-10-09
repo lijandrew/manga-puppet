@@ -67,6 +67,8 @@ _Note: live reload is only for the React frontend. Electron requires manual rela
 npm run dev
 ```
 
+**_Temporary chromium fix: copy chromium installation folder from node_modules/puppeteer to ./chromium_**
+
 ## **Built With**
 
 - [Electron](https://www.electronjs.org/)
